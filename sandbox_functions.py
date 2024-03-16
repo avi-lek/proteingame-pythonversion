@@ -12,11 +12,11 @@ def vis_reg():
     system = "".join([x for x in pdb_content])
     if len(get_chains(system))<=1 or True:
         if st.sidebar.toggle('ML Predicted Structure'):
-            wild_path = "C:\\Users\\Avi.Lekkelapudi25\\ProteinGame\\a.pdb"
+            wild_path = "C:\\Users\\Avi.Lekkelapudi25\\ProteinGame\\sandbox.pdb"
             aa_seq = st.text_input("Amino Acid Sequence", "EQLLKALEFLLKELLEKL")
             if st.sidebar.button("Refold Protein") or bool(~os.path.isfile(wild_path)):
-                get_esm_pdb(aa_seq)
-            with open("a.pdb") as ifile:
+                get_esm_pdb(aa_seq, "sandbox")
+            with open("pdb\\sandbox.pdb") as ifile:
                 system = "".join([x for x in ifile])
     view.addModelsAsFrames(system)
     i = 0

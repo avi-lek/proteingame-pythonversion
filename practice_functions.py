@@ -95,7 +95,7 @@ def practice():
     rna = st.session_state["mut_window"]
     m_aa = rna_to_amino_acids(rna)
     #check if a.pdb exists, if not load in
-    wild_path = "C:\\Users\\Avi.Lekkelapudi25\\ProteinGame\\a.pdb"
+    wild_path = "C:\\Users\\Avi.Lekkelapudi25\\ProteinGame\\pdb\\a.pdb"
     #if st.sidebar.button("Refold Protein") or bool(~os.path.isfile(wild_path)):
         #get_esm_pdb(m_aa)
     vis_overlay()
