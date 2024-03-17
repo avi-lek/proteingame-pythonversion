@@ -10,6 +10,7 @@ from Bio.PDB.PDBIO import PDBIO
 from model import*
 import os
 import pandas as pd
+from puzzles.puzzle_help import amino_acids_to_rna
 from rna2aa import *
 import random
 from puzzle_help import *
@@ -17,8 +18,8 @@ from puzzle_help import *
 def vis_overlay():
     wild_code = "1ans_1"
     mut_code = wild_code
-    wild_path = "C:\\Users\Avi.Lekkelapudi25\\ProteinGame\\wild.pdb"
-    mut_path = "C:\\Users\Avi.Lekkelapudi25\\ProteinGame\\a.pdb"
+    wild_path = "pdb\\wild.pdb"
+    mut_path = "pdb\\mut.pdb"
 
     og_structure = Bio.PDB.PDBParser(QUIET=True).get_structure(wild_code, wild_path)
     mut_structure = Bio.PDB.PDBParser(QUIET=True).get_structure(mut_code, mut_path)
@@ -83,23 +84,34 @@ def practice():
     
     #wildtype RNA/protein
     protein_code = "1pef"
-    if "w_aa" not in st.session_state:
+    if "w_aa" not in st.session_state or "w_rna" not in st.session_state or "mut_window" not in st.session_state or "mut_seq" not in st.session_state or "mut_start" not in st.session_state or "mut_len" not in st.session_state:
         st.session_state["w_aa"] = "EQLLKALEFLLKELLEKL"
         st.session_state["w_rna"] = amino_acids_to_rna(st.session_state["w_aa"])
-        mut_window_seq, mut_seq, window_seq, rna_seq = mutate(st.session_state["w_rna"])
+        mut_window_seq, mut_seq, window_seq, rna_seq,mut_start, mut_len = mutate(st.session_state["w_rna"])
         st.session_state["mut_window"] = mut_window_seq
-        st.session_state["mut_seq"] = mut_seq    
-    
+        st.session_state["mut_seq"] = mut_seq 
+        st.session_state["w_window"] = window_seq
+        st.session_state["w_rna"] = rna_seq
+        st.session_state["mut_start"] = mut_start
+        st.session_state["mut_len"] = mut_len
+
+    if bool(~os.path.isfile("pdb\\wild.pdb")):
+        get_esm_pdb("EQLLKALEFLLKELLEKL", "wild")
+        st.write("pred")
+    if st.sidebar.button("Refold Protein") or bool(~os.path.isfile("pdb\\mut.pdb")):
+        st.write()
+        f_rna = st.session_state["mut_seq"][0:st.session_state["mut_start"]]+st.session_state["mut_window"]+st.session_state["mut_seq"][(st.session_state["mut_start"]+st.session_state["mut_len"]):]
+        aa = rna_to_amino_acids(f_rna)
+        get_esm_pdb(aa, "mut")
+        st.write("pred")
 
     w_aa = st.session_state["w_aa"]
     rna = st.session_state["mut_window"]
     m_aa = rna_to_amino_acids(rna)
-    #check if a.pdb exists, if not load in
-    wild_path = "C:\\Users\\Avi.Lekkelapudi25\\ProteinGame\\pdb\\a.pdb"
-    #if st.sidebar.button("Refold Protein") or bool(~os.path.isfile(wild_path)):
-        #get_esm_pdb(m_aa)
+
     vis_overlay()
-    rna = st.text_input('Input RNA', rna)
+    st.session_state["mut_window"] = st.text_input('Input RNA', rna)
+    rna = st.session_state["mut_window"]
     m_aa = rna_to_amino_acids(rna)
 
     rna_dict = {" ":"RNA"}

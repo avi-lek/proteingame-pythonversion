@@ -12,7 +12,7 @@ def vis_reg():
     system = "".join([x for x in pdb_content])
     if len(get_chains(system))<=1 or True:
         if st.sidebar.toggle('ML Predicted Structure'):
-            wild_path = "C:\\Users\\Avi.Lekkelapudi25\\ProteinGame\\sandbox.pdb"
+            wild_path = "pdb\\sandbox.pdb"
             aa_seq = st.text_input("Amino Acid Sequence", "EQLLKALEFLLKELLEKL")
             if st.sidebar.button("Refold Protein") or bool(~os.path.isfile(wild_path)):
                 get_esm_pdb(aa_seq, "sandbox")
@@ -60,8 +60,10 @@ def vis_chain():
     with st.sidebar.expander("Visualization Settings"):
         st.session_state["style"]  = st.selectbox('style',['cartoon','stick','sphere'])
         chain_color = []
-        for chain in chains:
-            chain_color.append(st.color_picker('Chain ' + chain + ' Color', '#00f900'))
+        colors = ['#00FFFF', '#FF00FF', '#FFFF00', '#00FF00', '#FFC0CB', '#FFA500', '#0000FF', '#800080', '#FF0000', '#008080']
+        colors = colors[0:len(chains)]
+        for chain, color in zip(chains, colors):
+            chain_color.append(st.color_picker('Chain ' + chain + ' Color', color))
         i = 0
         if st.session_state["style"] != 'sphere':
             surface = st.checkbox("Generate Surface")
