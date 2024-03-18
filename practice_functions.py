@@ -13,8 +13,9 @@ import pandas as pd
 from puzzles.puzzle_help import amino_acids_to_rna
 from rna2aa import *
 import random
-from puzzle_help import *
-
+from puzzles.puzzle_help import *
+from get_puzzle import *
+import pandas as pd
 def vis_overlay():
     wild_code = "1ans_1"
     mut_code = wild_code
@@ -50,7 +51,7 @@ def vis_overlay():
 
     super_imposer = Bio.PDB.Superimposer()
     super_imposer.set_atoms(og_atoms[0 : shortest_length], mut_atoms[0 : shortest_length])
-    #super_imposer.apply(mut_structure.get_atoms())
+    super_imposer.apply(mut_structure.get_atoms())
     io=PDBIO()
     io.set_structure(pdb_object=mut_structure)
     io.save(mut_path)
@@ -60,6 +61,8 @@ def vis_overlay():
 
     with open(mut_path) as ifile:
         mut_system = "".join([x for x in ifile])
+
+
 
     view = py3Dmol.view(width=800, height=600)
     with st.sidebar.expander("Visualization Settings"):
@@ -78,69 +81,276 @@ def vis_overlay():
 
     view.zoomTo()
     showmol(view, height=600, width=800)
+def viz_dna(choice):
+    dna = rna_to_DNA(st.session_state[choice+"_change_rna"])
+    
+    dna_colors = []
+    rna_colors = []
+    color_dict = {"A":"Red", "U":"Blue", "G":'Yellow', "C":"Green", "T":"Purple"}
+    
+    for i in st.session_state["puzzle_info"][choice+"_rna_window"]:
+        dna_colors.append(color_dict[rna_to_DNA(i)])
+        dna_colors.append(color_dict[rna_to_DNA(i)]) 
+        dna_colors.append(color_dict[rna_to_DNA(i)])
+        dna_colors.append(color_dict[rna_to_DNA(i)])   
+    for i in st.session_state[choice+"_change_rna"]:
+        rna_colors.append(color_dict[i])
+        rna_colors.append(color_dict[i])
+        rna_colors.append(color_dict[i])
+        rna_colors.append(color_dict[i])
+
+    with open("pdb//dna//dna.pdb") as ifile:
+        system1 = "".join([x for x in ifile])
+    with open("pdb//dna//rna.pdb") as ifile:
+        system2 = "".join([x for x in ifile])
+    view = py3Dmol.view(width=800, height=300)
+    view.addModelsAsFrames(system1)
+    view.addModelsAsFrames(system2)
+    i=0 
+    for line in system1.split('\n'):
+        split = line.split()
+        if len(split) == 0 or split[0] != "ATOM":
+            continue
+        if i<len(dna_colors):
+            view.setStyle({'model': 0, 'serial': i+1}, {"sphere": {'color': dna_colors[i], 'opacity': 0.5}})
+        i += 1
+    
+    i=0 
+    for line in system2.split('\n'):
+        split = line.split()
+        if len(split) == 0 or split[0] != "ATOM":
+            continue
+        if i<len(rna_colors):
+            view.setStyle({'model': 1, 'serial': i+1}, {"sphere": {"color": rna_colors[i], 'opacity': 1}})            
+        i=i+1
+    view.zoomTo()
+
+    showmol(view, height=300, width=800)
+
+def transcript_dogma():
+    with st.sidebar.expander("Nucleotide Bases Key"):
+        st.color_picker(label="Cytosine (C)", value="#00FF00", disabled=True)
+        st.color_picker(label="Guanine (G)", value="#FFFF00", disabled=True)
+        st.color_picker(label="Adenine (A)", value="#FF0000", disabled=True)
+        st.color_picker(label="Thymine (T) - DNA Only", value="#800080", disabled=True)
+        st.color_picker(label="Uracil (U) - RNA Only", value="#0000FF", disabled=True)
+    if "w_change_aa" not in st.session_state:
+        st.session_state["w_change_aa"]=""
+    if "m_change_aa" not in st.session_state:
+        st.session_state["m_change_aa"]=""
+    if "w_change_rna" not in st.session_state:
+        st.session_state["w_change_rna"]=""
+    if "m_change_rna" not in st.session_state:
+        st.session_state["m_change_rna"]=""
+    if "input_checks" not in st.session_state:
+        st.session_state["input_checks"]=[False, False]
+    
+    st.session_state["puzzle_info"]['m_rna']
+
+    wild_dict = {
+        "":["Wild-Type DNA", "Wild-Type mRNA"]#, "Wild-Type Amino Acids"]                   
+    }
+    mut_dict = {
+        "":["Mutated DNA", "Mutated mRNA"]#, "Mutated Amino Acids"]                   
+    }
+    place1 = st.empty()
+    with place1.container():
+        wrna_text = st.text_input("Wild-Type mRNA Sequence", max_chars=30, disabled=st.session_state["input_checks"][0])
+        if wrna_text.isalpha() and is_rna(wrna_text.upper()):
+            st.session_state["w_change_rna"] = wrna_text
+        else:
+            if wrna_text != '':
+                st.warning('Only RNA Bases are permitted: A, C, U, G', icon="⚠️")
+    for i in range(10):
+        dna_codon = rna_to_DNA(st.session_state["puzzle_info"]['w_rna'][i*3:(i*3+3)])
+        rna_codon = (st.session_state["w_change_rna"] +'                              ')[i*3:(i*3+3)]
+        #aa = (st.session_state["w_change_aa"]+'          ')[i]
+        wild_dict[str(i+1)] = [dna_codon, rna_codon]#, aa]
+    df1 = pd.DataFrame(wild_dict)
+    st.dataframe(df1, use_container_width=True, hide_index=True)
+    viz_dna('w')
+    if st.button("Check Transcription of Wild-Type Sequence"):
+        if st.session_state["puzzle_info"]['w_rna_window'] == st.session_state["w_change_rna"]:
+            st.success('Correct Transcription!', icon="✅")
+            st.session_state["input_checks"][0]=True
+            place1.empty()
+        else:
+            st.error('Incorrect Transcription', icon="🚨")
+            st.write(st.session_state["puzzle_info"]['w_rna_window'])
+            st.session_state["input_checks"][0]=False
+            
+    st.divider()
+    place2 = st.empty()
+    with place2.container():
+        mrna_text = st.text_input("Mutated mRNA Sequence", max_chars=30, disabled=st.session_state["input_checks"][1])
+        if mrna_text.isalpha() and is_rna(mrna_text.upper()):
+            st.session_state["m_change_rna"] = mrna_text
+        else:
+            if mrna_text != '':
+                st.warning('Only RNA Bases are permitted: A, C, U, G', icon="⚠️")
+    for i in range(10):
+        dna_codon = rna_to_DNA(st.session_state["puzzle_info"]['m_rna'][i*3:(i*3+3)])
+        rna_codon = (st.session_state["m_change_rna"] +'                              ')[i*3:(i*3+3)]
+        #aa = '                                        '[i]
+        mut_dict[str(i+1)] = [dna_codon, rna_codon]#, aa]
+    df2 = pd.DataFrame(mut_dict)
+    st.dataframe(df2, use_container_width=True, hide_index=True)
+    viz_dna('m')
+    if st.button("Check Transcription of Mutated Sequence"):
+        if st.session_state["puzzle_info"]['m_rna_window'] == st.session_state["m_change_rna"]:
+            st.success('Correct Transcription!', icon="✅")
+            place2.empty()
+            st.session_state["input_checks"][1]=True
+        else:
+            st.error('Incorrect Transcription', icon="🚨")
+            st.write(st.session_state["puzzle_info"]['m_rna_window'])
+            st.session_state["input_checks"][1]=False
+    if st.session_state["input_checks"][0]==True and st.session_state["input_checks"][1]==True:
+        st.switch_page("pages//Translation.py")
 
 
-def practice():
+def transcription():
+    # Removes Previous Puzzle Initialization
+    if st.sidebar.button("New Puzzle"):
+        for key in st.session_state.keys():
+            del st.session_state[key]
     
     #wildtype RNA/protein
-    protein_code = "1pef"
-    if "w_aa" not in st.session_state or "w_rna" not in st.session_state or "mut_window" not in st.session_state or "mut_seq" not in st.session_state or "mut_start" not in st.session_state or "mut_len" not in st.session_state:
-        st.session_state["w_aa"] = "EQLLKALEFLLKELLEKL"
-        st.session_state["w_rna"] = amino_acids_to_rna(st.session_state["w_aa"])
-        mut_window_seq, mut_seq, window_seq, rna_seq,mut_start, mut_len = mutate(st.session_state["w_rna"])
-        st.session_state["mut_window"] = mut_window_seq
-        st.session_state["mut_seq"] = mut_seq 
-        st.session_state["w_window"] = window_seq
-        st.session_state["w_rna"] = rna_seq
-        st.session_state["mut_start"] = mut_start
-        st.session_state["mut_len"] = mut_len
+    if "puzzle_info" not in st.session_state:
+        get_puzzle()
 
     if bool(~os.path.isfile("pdb\\wild.pdb")):
-        get_esm_pdb("EQLLKALEFLLKELLEKL", "wild")
-        st.write("pred")
-    if st.sidebar.button("Refold Protein") or bool(~os.path.isfile("pdb\\mut.pdb")):
-        st.write()
-        f_rna = st.session_state["mut_seq"][0:st.session_state["mut_start"]]+st.session_state["mut_window"]+st.session_state["mut_seq"][(st.session_state["mut_start"]+st.session_state["mut_len"]):]
-        aa = rna_to_amino_acids(f_rna)
-        get_esm_pdb(aa, "mut")
-        st.write("pred")
+        get_esm_pdb(st.session_state["puzzle_info"]["w_aa"], "wild")
+    if bool(~os.path.isfile("pdb\\mut.pdb")):
+        get_esm_pdb(rna_to_amino_acids(st.session_state["puzzle_info"]["m_rna"]), "mut")
+    transcript_dogma()
+import re
 
-    w_aa = st.session_state["w_aa"]
-    rna = st.session_state["mut_window"]
-    m_aa = rna_to_amino_acids(rna)
-
-    vis_overlay()
-    st.session_state["mut_window"] = st.text_input('Input RNA', rna)
-    rna = st.session_state["mut_window"]
-    m_aa = rna_to_amino_acids(rna)
-
-    rna_dict = {" ":"RNA"}
-    m_aa_dict = {" ":"Amino Acids-M"}
-    w_aa_dict = {" ":"Amino Acids-W"}
-    for i in range(10):
-        try:
-            rna_dict[str(i+1)]=rna[i*3:(i*3+3)]
-        except:
-            rna_dict[str(i+1)]=''
+def translation():
     
-        try:
-            m_aa_dict[str(i+1)]=m_aa[i]
-        except:
-            m_aa_dict[str(i+1)] =''
+    if bool(~os.path.isfile("pdb//wild.pdb")):
+        get_esm_pdb(rna_to_amino_acids(st.session_state["puzzle_info"]['w_rna']), "wild")
+    if bool(~os.path.isfile("pdb//mut.pdb")):
+        get_esm_pdb(rna_to_amino_acids(st.session_state["puzzle_info"]['m_rna']), "mut")
+    vis_overlay()
+    
+    st.divider()    
+    if "trans_correct" not in st.session_state:
+        st.session_state["trans_correct"] = [False, False]
+    if st.sidebar.button("New Puzzle"):
+        for key in st.session_state.keys():
+            del st.session_state[key]
+        st.switch_page("pages//Transcription.py")
+    #Makes Popup Codon Chart
+    with st.sidebar.expander("Codon Chart"):
+        st.image('codon_wheel.png')
+    if "w_aa_change" not in st.session_state or "m_aa_change" not in st.session_state:
+        st.session_state["w_aa_change"] = ''
+        st.session_state["m_aa_change"] = ''
+    
+    wild_dict = {
+        "":["Wild-Type DNA", "Wild-Type mRNA", "Wild-Type Amino Acids"]                   
+    }
+    mut_dict = {
+        "":["Mutated DNA", "Mutated mRNA", "Mutated Amino Acids"]                   
+    }
+    place1 = st.empty()
+    with place1.container():
+        waa_text = st.text_input("Wild-Type Amino Acid Sequence", max_chars=10, disabled=st.session_state["trans_correct"][0])
+        if waa_text.isalpha() and is_aa(waa_text.upper()):
+            st.session_state["w_aa_change"] = waa_text
+        else:
+            if waa_text != '':
+                st.warning('Only Amino Acids are permitted.', icon="⚠️")
+    for i in range(10):
+        dna_codon = rna_to_DNA(st.session_state["puzzle_info"]['w_rna_window'][i*3:(i*3+3)])
+        rna_codon = (st.session_state["puzzle_info"]["w_rna_window"] +'                              ')[i*3:(i*3+3)]
+        aa = (st.session_state["w_aa_change"]+'          ')[i]
+        wild_dict[str(i+1)] = [dna_codon, rna_codon, aa]
+    df1 = pd.DataFrame(wild_dict)
+    st.dataframe(df1, use_container_width=True, hide_index=True)
+    if st.button("Check Translation of Wild-Type Sequence"):
+        window = "".join(re.findall("[a-zA-Z]+", rna_to_amino_acids(st.session_state["puzzle_info"]['w_rna_window']).replace(" ","")))
+        if rna_to_amino_acids(st.session_state["w_change_rna"]) == st.session_state["w_aa_change"]:
+            st.success('Correct Translation!', icon="✅")
+            st.session_state["trans_correct"][0]=True
+            place1.empty()
+        else:
+            st.write(rna_to_amino_acids(st.session_state["w_change_rna"]))
+            st.error('Incorrect Translation', icon="🚨")
+            st.session_state["trans_correct"][0]=False
+            
+    st.divider()
+    place2 = st.empty()
+    with place2.container():
+        maa_text = st.text_input("Mutated Amino Acid Sequence", max_chars=10, disabled=st.session_state["trans_correct"][1])
+        if maa_text.isalpha() and is_aa(maa_text.upper()):
+            st.session_state["m_aa_change"] = maa_text
+        else:
+            if maa_text != '':
+                st.warning('Only Amino Acids are permitted.', icon="⚠️")
+    for i in range(10):
+        dna_codon = rna_to_DNA(st.session_state["puzzle_info"]['m_rna_window'][i*3:(i*3+3)])
+        rna_codon = (st.session_state["puzzle_info"]["m_rna_window"] +'                              ')[i*3:(i*3+3)]
+        aa = (st.session_state["m_aa_change"]+'          ')[i]
+        mut_dict[str(i+1)] = [dna_codon, rna_codon, aa]
+    df1 = pd.DataFrame(mut_dict)
+    st.dataframe(df1, use_container_width=True, hide_index=True)
+    
+    if st.button("Check Translation of Mutated Sequence"):
+        if rna_to_amino_acids(st.session_state["m_change_rna"]) == st.session_state["m_aa_change"]:
+            st.success('Correct Translation!', icon="✅")
+            st.session_state["trans_correct"][0]=True
+            place2.empty()
+        else:
+            st.write(rna_to_amino_acids(st.session_state["m_change_rna"]))
+            st.error('Incorrect Translation', icon="🚨")
+            st.session_state["trans_correct"][0]=False
+            
+    if st.session_state["trans_correct"][0]==True and st.session_state["trans_correct"][1]==True:
+        st.toast('Correctly Translated!', icon='😍')
+        for key in st.session_state.keys():
+            del st.session_state[key]
+        st.switch_page("pages//2_Practice.py")
 
-        try:
-            w_aa_dict[str(i+1)]=w_aa[i]
-        except:
-            w_aa_dict[str(i+1)]=''
 
 
-    df = pd.DataFrame(
-    [
-       rna_dict,
-       m_aa_dict,
-       w_aa_dict
-    ]
-    )
-    st.dataframe(df, use_container_width=True, hide_index=True)
-    if list(m_aa_dict.values())[1:] == list(w_aa_dict.values())[1:] :
-        st.success("Success")
+def q_viz(file, color):
+    with open(file) as ifile:
+        system = "".join([x for x in ifile])
+    view = py3Dmol.view(height=600, width=800)
+    view.addModelsAsFrames(system)
+    view.setStyle({'model': -1}, {"cartoon": {'color': color}})
+    view.zoomTo()
+    showmol(view, height=600, width=800)
+def rna_to_DNA(rna):
+    dna = rna.replace("U", "T")
+    opp_dna = []
+    for i in list(dna):
+        if i=="A":
+            opp_dna.append("T")
+        elif i=="T":
+            opp_dna.append("A")
+        elif i =="C":
+            opp_dna.append("G")
+        elif i =="G":
+            opp_dna.append("C")
+    return "".join(opp_dna)
+    
+def is_aa(text):
+    amino_acids = ['A', 'R', 'N', 'D', 'C', 'Q', 'E', 'G', 'H', 'I', 'L', 'K', 'M', 'F', 'P', 'S', 'T', 'W', 'Y', 'V']
+    text = list(text)
+    exists = True
+    for c in text:
+        if c not in amino_acids:
+            exists = False
+    return exists
+def is_rna(text):
+    bases = ['A', 'C', 'U', 'G']
+    text = list(text)
+    exists = True
+    for c in text:
+        if c not in bases:
+            exists = False
+    return exists
+
