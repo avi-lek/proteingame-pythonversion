@@ -16,6 +16,8 @@ import random
 from puzzles.puzzle_help import *
 from get_puzzle import *
 import pandas as pd
+from text_highlighter import text_highlighter
+
 def vis_overlay():
     wild_code = "1ans_1"
     mut_code = wild_code
@@ -294,24 +296,112 @@ def translation():
         rna_codon = (st.session_state["puzzle_info"]["m_rna_window"] +'                              ')[i*3:(i*3+3)]
         aa = (st.session_state["m_aa_change"]+'          ')[i]
         mut_dict[str(i+1)] = [dna_codon, rna_codon, aa]
-    df1 = pd.DataFrame(mut_dict)
-    st.dataframe(df1, use_container_width=True, hide_index=True)
+    df2 = pd.DataFrame(mut_dict)
+    st.dataframe(df2, use_container_width=True, hide_index=True)
     
     if st.button("Check Translation of Mutated Sequence"):
         if rna_to_amino_acids(st.session_state["m_change_rna"]) == st.session_state["m_aa_change"]:
             st.success('Correct Translation!', icon="✅")
             st.session_state["trans_correct"][0]=True
             place2.empty()
+            st.session_state["trans_correct"][1]=True
         else:
             st.write(rna_to_amino_acids(st.session_state["m_change_rna"]))
             st.error('Incorrect Translation', icon="🚨")
             st.session_state["trans_correct"][0]=False
             
-    if st.session_state["trans_correct"][0]==True and st.session_state["trans_correct"][1]==True:
-        st.toast('Correctly Translated!', icon='😍')
-        for key in st.session_state.keys():
-            del st.session_state[key]
-        st.switch_page("pages//2_Practice.py")
+    if st.session_state["trans_correct"][1]==True and st.session_state["trans_correct"][1]==True:
+        st.toast('Correctly Translated!')
+        st.session_state["df_w"] = df1
+        st.session_state["df_m"] = df2
+        st.switch_page("pages//MutationQuiz.py")
+
+def select_mut_type():
+    st.write(st.session_state.select_mut_type)
+    if st.session_state["select_mut_type_bool"]!=None:
+        if st.session_state['puzzle_info']["m_type"][0].upper() == st.session_state.select_mut_type[0]:
+            st.session_state["select_mut_type_bool"]=True
+        else:
+            st.session_state["select_mut_type_bool"]=False
+
+
+def mut_quiz():
+    if "select_mut_type_bool" not in st.session_state:
+        st.session_state["select_mut_type_bool"] = False
+    st.dataframe(st.session_state["df_w"], use_container_width=True, hide_index=True)
+    st.dataframe(st.session_state["df_m"], use_container_width=True, hide_index=True)
+    mut_type = st.selectbox(label="What type of mutation was made?", key="select_mut_type", options=["Insertion", "Deletion", "Substitution"], on_change=select_mut_type, index=None, disabled=st.session_state["select_mut_type_bool"])
+    if mut_type!=None:
+        if st.session_state['puzzle_info']["m_type"].upper() == mut_type[0]:
+            st.success('Correct!', icon="✅")
+            if mut_type[0] == 'I':
+                check_insertion()
+            elif mut_type[0] == 'D':
+                check_deletion()
+            elif mut_type[0] == 'S':
+                #check_substitution()
+                check_deletion()
+        else:
+            st.error('Incorrect', icon="🚨")
+            st.write(st.session_state['puzzle_info']["m_type"][0].upper())
+
+def check_insertion():
+    w_dna_connected = "".join(st.session_state["df_w"].iloc[0].tolist()[1:])
+    w_dna = "-".join(list(w_dna_connected))
+    m_dna = "".join(st.session_state["df_m"].iloc[0].tolist()[1:])
+    result = text_highlighter(
+        text=w_dna,
+        labels=[("Select Point of Insertion", "#faffc9")],
+    )
+    insert = st.text_input("Inserted Sequence", max_chars=30)
+
+    output = w_dna[0:result[0]["start"]]+insert+w_dna[result[0]["start"]:-1]
+    output = "".join([n for n in output if n.isalpha()]).upper()[0:30]
+
+    if len(result)>0:
+        if output == m_dna:
+            st.success("Correct!")
+        else:
+            st.error('Incorrect', icon="🚨")
+            st.write("You Inputed: "+ output)
+            st.write("The Answer : "+ m_dna)
+    
+def check_deletion():
+    w_dna = "".join(st.session_state["df_w"].iloc[0].tolist()[1:])#[3:]
+    m_dna = "".join(st.session_state["df_m"].iloc[0].tolist()[1:])#[3:]
+    result = text_highlighter(
+        text=w_dna,
+        labels=[("Select Deleted Sequence", "#faffc9")],
+    )
+    if len(result)>0:
+        del_seq = w_dna[0:result[0]["start"]]+w_dna[result[0]["end"]:-1]
+        if del_seq == m_dna:
+            st.success("Correct!")
+        else:
+            st.error('Incorrect', icon="🚨")
+            st.write("You Inputed: "+ del_seq)
+            st.write("Answer: "+ m_dna)
+def check_substitution():
+    w_dna = "".join(st.session_state["df_w"].iloc[0].tolist()[1:])
+    m_dna = "".join(st.session_state["df_m"].iloc[0].tolist()[1:])
+    result = text_highlighter(
+        text=w_dna,
+        labels=[("Select Substituted Sequence", "#faffc9")],
+    )
+    insert = st.text_input("Substitued Sequence", max_chars=30)
+    if len(insert)!=len(result[0]["text"]):
+        st.warning("Both sequence must have equal length for substitution.")
+    else:
+        output = w_dna[0:result[0]["start"]]+insert+w_dna[result[0]["end"]:-1]
+        output = "".join([n for n in output if n.isalpha()]).upper()
+        if len(result)>0:
+            if output == m_dna:
+                st.success("Correct!")
+            else:
+                st.error('Incorrect', icon="🚨")
+                st.write("You Inputed: "+ output)
+                st.write("The Answer : "+ m_dna)
+
 
 
 

@@ -1,12 +1,14 @@
 import streamlit as st
 from stmol import showmol
 from sandbox_functions import *
-from st_pages import Page, Section, show_pages, add_page_title
+from st_pages import Page, Section, show_pages, add_page_title, hide_pages
 
 st.set_page_config(page_title="Practice", page_icon=":dna:", layout="wide")
-from st_pages import hide_pages
-hide_pages(["Transcription", "Translation"])
+hide_pages(["Transcription", "Identify Mutations", "Translation", "Sandbox Instructions"])
 add_page_title()
+if "instructions_read" not in st.session_state or st.sidebar.button("Instructions"):
+    st.session_state["instructions_read"] = True
+    st.switch_page("pages//Sandbox_instructions.py")
 
 st.markdown("""
         <style>
