@@ -17,8 +17,18 @@ from puzzles.puzzle_help import *
 from get_puzzle import *
 import pandas as pd
 from text_highlighter import text_highlighter
+from streamlit_custom_notification_box import custom_notification_box as scnb
 
+    
 def vis_overlay():
+    if "info1" not in st.session_state:
+        placeholder = st.empty()
+        with placeholder.container():
+            with st.form("form"):
+                st.write("Below is the mutated protein (red) compared to the non-mutated protein (green). Due to a mutation in the DNA, the mRNA sequence is also shifted. Since mRNA is transcribed into amino acids, the amino acid sequence of the protein is also shifted, resulting in structural changes. To view the impacts of this mutation on amino acid sequence, transcribe the mRNA sequence in the table using the codon chart in the sidebar.")
+                if st.form_submit_button("Close"):
+                    st.session_state["info1"]=True
+                    placeholder.empty()
     wild_code = "1ans_1"
     mut_code = wild_code
     wild_path = "pdb\\wild.pdb"
@@ -66,10 +76,10 @@ def vis_overlay():
 
 
 
-    view = py3Dmol.view(width=800, height=600)
+    view = py3Dmol.view(width=800, height=400)
     with st.sidebar.expander("Visualization Settings"):
         wcolor = st.color_picker('Wildtype Protein Color', '#00f900')
-        wopacity = st.slider("Wildtype Protein Opacity", min_value=0.0,max_value=1.0, value=0.5)
+        wopacity = st.slider("Wildtype Protein Opacity", min_value=0.0,max_value=1.0, value=1.0)
         mcolor = st.color_picker('Mutated Protein Color', '#F90000')
         mopacity = st.slider("Mutated Protein Opacity", min_value=0.0,max_value=1.0, value=1.0)
         st.session_state["style"]  = st.selectbox('style',['cartoon','stick','sphere'])
@@ -82,7 +92,7 @@ def vis_overlay():
     view.setStyle({'model':1}, {st.session_state["style"]: {'color': mcolor, 'opacity': mopacity}})
 
     view.zoomTo()
-    showmol(view, height=600, width=800)
+    showmol(view, width=800, height=400)
 def viz_dna(choice):
     dna = rna_to_DNA(st.session_state[choice+"_change_rna"])
     
@@ -104,7 +114,8 @@ def viz_dna(choice):
     with open("pdb//dna//dna.pdb") as ifile:
         system1 = "".join([x for x in ifile])
     with open("pdb//dna//rna.pdb") as ifile:
-        system2 = "".join([x for x in ifile])
+        pre_sys = [x for x in ifile][0:len(rna_colors)]
+        system2 = "".join(pre_sys)
     view = py3Dmol.view(width=800, height=300)
     view.addModelsAsFrames(system1)
     view.addModelsAsFrames(system2)
@@ -123,13 +134,23 @@ def viz_dna(choice):
         if len(split) == 0 or split[0] != "ATOM":
             continue
         if i<len(rna_colors):
-            view.setStyle({'model': 1, 'serial': i+1}, {"sphere": {"color": rna_colors[i], 'opacity': 1}})            
+            view.setStyle({'model': 1, 'serial': i+1}, {"sphere": {"color": rna_colors[i], 'opacity': 1}})     
+          
         i=i+1
     view.zoomTo()
 
-    showmol(view, height=300, width=800)
+    showmol(view, width=800, height=300)
 
 def transcript_dogma():
+    if "info0" not in st.session_state:
+        placeholder = st.empty()
+        with placeholder.container():
+            with st.form("form"):
+                st.write("Fill in the mRNA sequence in the text box below by transcribing the DNA sequence in the table.")
+                if st.form_submit_button("Close"):
+                    st.session_state["info0"]=True
+                    placeholder.empty()
+
     with st.sidebar.expander("Nucleotide Bases Key"):
         st.color_picker(label="Cytosine (C)", value="#00FF00", disabled=True)
         st.color_picker(label="Guanine (G)", value="#FFFF00", disabled=True)
@@ -339,12 +360,11 @@ def mut_quiz():
             elif mut_type[0] == 'D':
                 check_deletion()
             elif mut_type[0] == 'S':
-                #check_substitution()
-                check_deletion()
+                check_substitution()
         else:
             st.error('Incorrect', icon="🚨")
             st.write(st.session_state['puzzle_info']["m_type"][0].upper())
-
+import time
 def check_insertion():
     w_dna_connected = "".join(st.session_state["df_w"].iloc[0].tolist()[1:])
     w_dna = "-".join(list(w_dna_connected))
@@ -354,17 +374,23 @@ def check_insertion():
         labels=[("Select Point of Insertion", "#faffc9")],
     )
     insert = st.text_input("Inserted Sequence", max_chars=30)
+    try:
+        output = w_dna[0:result[0]["start"]]+insert+w_dna[result[0]["start"]:-1]
+        output = "".join([n for n in output if n.isalpha()]).upper()[0:30]
 
-    output = w_dna[0:result[0]["start"]]+insert+w_dna[result[0]["start"]:-1]
-    output = "".join([n for n in output if n.isalpha()]).upper()[0:30]
-
-    if len(result)>0:
-        if output == m_dna:
-            st.success("Correct!")
-        else:
-            st.error('Incorrect', icon="🚨")
-            st.write("You Inputed: "+ output)
-            st.write("The Answer : "+ m_dna)
+        if len(result)>0:
+            if output == m_dna:
+                st.success("Correct!")
+                for key in st.session_state.keys():
+                    del st.session_state[key]
+                time.sleep(3)
+                st.switch_page("pages//Practice.py")
+            else:
+                st.error('Incorrect', icon="🚨")
+                st.write("You Inputed: "+ output)
+                st.write("The Answer : "+ m_dna)
+    except:
+        st.write()
     
 def check_deletion():
     w_dna = "".join(st.session_state["df_w"].iloc[0].tolist()[1:])#[3:]
@@ -377,6 +403,10 @@ def check_deletion():
         del_seq = w_dna[0:result[0]["start"]]+w_dna[result[0]["end"]:-1]
         if del_seq == m_dna:
             st.success("Correct!")
+            for key in st.session_state.keys():
+                del st.session_state[key]
+            time.sleep(3)
+            st.switch_page("pages//Practice.py")
         else:
             st.error('Incorrect', icon="🚨")
             st.write("You Inputed: "+ del_seq)
@@ -392,15 +422,19 @@ def check_substitution():
     if len(insert)!=len(result[0]["text"]):
         st.warning("Both sequence must have equal length for substitution.")
     else:
-        output = w_dna[0:result[0]["start"]]+insert+w_dna[result[0]["end"]:-1]
+        output = w_dna[0:result[0]["start"]]+insert+w_dna[result[0]["end"]:]
         output = "".join([n for n in output if n.isalpha()]).upper()
         if len(result)>0:
-            if output == m_dna:
+            if output == m_dna[0:30]:
                 st.success("Correct!")
+                for key in st.session_state.keys():
+                    del st.session_state[key]
+                time.sleep(3)
+                st.switch_page("pages//Practice.py")
             else:
                 st.error('Incorrect', icon="🚨")
                 st.write("You Inputed: "+ output)
-                st.write("The Answer : "+ m_dna)
+                st.write("The Answer : "+ m_dna[0:30])
 
 
 

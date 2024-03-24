@@ -1,7 +1,7 @@
 from st_pages import Page, Section, show_pages, add_page_title, hide_pages
 import streamlit as st
 from practice_functions import *
-hide_pages(["Identify Mutations"])
+hide_pages(["Transcription", "Identify Mutations", "Translation", "Sandbox Instructions"])
 
 if "translate_win" not in st.session_state:
     st.session_state["translate_win"] = False

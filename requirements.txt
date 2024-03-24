@@ -5,3 +5,4 @@ pandas
 streamlit
 st_pages
 py3Dmol
+stmol
