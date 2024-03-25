@@ -8,7 +8,7 @@ hide_pages(["Transcription", "Identify Mutations", "Translation", "Sandbox Instr
 add_page_title()
 if "instructions_read" not in st.session_state or st.sidebar.button("Instructions"):
     st.session_state["instructions_read"] = True
-    st.switch_page("pages//Sandbox_instructions.py")
+    st.switch_page("other_pages//Sandbox_instructions.py")
 
 st.markdown("""
         <style>

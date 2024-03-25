@@ -42,4 +42,4 @@ st.markdown("On top of these, repeat expansions lead to genetic disorders becaus
 
 st.markdown("**If you understand central dogma and mutations, and you feel ready to start the puzzle, click on the 'Start Puzzle' button in the sidebar.**")
 if st.sidebar.button("Start Puzzle"):
-    st.switch_page("pages//Transcription.py")
+    st.switch_page("other_pages//Transcription.py")

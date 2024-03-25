@@ -227,7 +227,7 @@ def transcript_dogma():
             st.write(st.session_state["puzzle_info"]['m_rna_window'])
             st.session_state["input_checks"][1]=False
     if st.session_state["input_checks"][0]==True and st.session_state["input_checks"][1]==True:
-        st.switch_page("pages//Translation.py")
+        st.switch_page("other_pages//Translation.py")
 
 
 def transcription():
@@ -261,7 +261,7 @@ def translation():
     if st.sidebar.button("New Puzzle"):
         for key in st.session_state.keys():
             del st.session_state[key]
-        st.switch_page("pages//Transcription.py")
+        st.switch_page("other_pages//Transcription.py")
     #Makes Popup Codon Chart
     with st.sidebar.expander("Codon Chart"):
         st.image('codon_wheel.png')
@@ -333,7 +333,7 @@ def translation():
         st.toast('Correctly Translated!')
         st.session_state["df_w"] = df1
         st.session_state["df_m"] = df2
-        st.switch_page("pages//MutationQuiz.py")
+        st.switch_page("other_pages//MutationQuiz.py")
 
 def select_mut_type():
     st.write(st.session_state.select_mut_type)
@@ -382,7 +382,7 @@ def check_insertion():
                 for key in st.session_state.keys():
                     del st.session_state[key]
                 time.sleep(3)
-                st.switch_page("pages//Practice.py")
+                st.switch_page("other_pages//Practice.py")
             else:
                 st.error('Incorrect', icon="🚨")
                 st.write("You Inputed: "+ output)
@@ -404,7 +404,7 @@ def check_deletion():
             for key in st.session_state.keys():
                 del st.session_state[key]
             time.sleep(3)
-            st.switch_page("pages//Practice.py")
+            st.switch_page("other_pages//Practice.py")
         else:
             st.error('Incorrect', icon="🚨")
             st.write("You Inputed: "+ del_seq)
@@ -428,7 +428,7 @@ def check_substitution():
                 for key in st.session_state.keys():
                     del st.session_state[key]
                 time.sleep(3)
-                st.switch_page("pages//Practice.py")
+                st.switch_page("other_pages//Practice.py")
             else:
                 st.error('Incorrect', icon="🚨")
                 st.write("You Inputed: "+ output)

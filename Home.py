@@ -22,12 +22,12 @@ st.markdown("""
 show_pages(
     [
         Page("Home.py", "Home"),
-        Page("pages//Sandbox.py", "Sandbox"),
-        Page("pages//Sandbox_instructions.py", "Sandbox Instructions"),
-        Page("pages//Practice.py", "Mutations Practice"),
-        Page("pages//Transcription.py", "Transcription"),
-        Page("pages//Translation.py", "Translation"),
-        Page("pages//MutationQuiz.py", "Identify Mutations")
+        Page("other_pages//Sandbox.py", "Sandbox"),
+        Page("other_pages//Sandbox_instructions.py", "Sandbox Instructions"),
+        Page("other_pages//Practice.py", "Mutations Practice"),
+        Page("other_pages//Transcription.py", "Transcription"),
+        Page("other_pages//Translation.py", "Translation"),
+        Page("other_pages//MutationQuiz.py", "Identify Mutations")
     ]
 )
 

@@ -6,7 +6,7 @@ add_page_title()
 
 hide_pages(["Transcription", "Identify Mutations", "Translation", "Sandbox Instructions"])
 if st.sidebar.button("Go To Sandbox"):
-    st.switch_page("pages//Sandbox.py")
+    st.switch_page("other_pages//Sandbox.py")
 
 
 st.markdown("**Sandbox Mode**")
