@@ -17,8 +17,6 @@ from puzzles.puzzle_help import *
 from get_puzzle import *
 import pandas as pd
 from text_highlighter import text_highlighter
-from streamlit_custom_notification_box import custom_notification_box as scnb
-
     
 def vis_overlay():
     if "info1" not in st.session_state:
