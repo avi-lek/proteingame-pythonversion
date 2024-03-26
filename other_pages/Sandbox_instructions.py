@@ -9,7 +9,6 @@ if st.sidebar.button("Go To Sandbox"):
     st.switch_page("other_pages//Sandbox.py")
 
 
-st.markdown("**Sandbox Mode**")
 st.markdown('''In this mode, you can experiment with a protein of your choice and visualize its basic structure and characteristics. You can also try changing its amino acid sequence and observing the resulting structure.''')
 
 st.image("screenshots//SandboxDiagram.png")

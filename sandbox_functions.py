@@ -8,6 +8,13 @@ import os
 import Bio
 from Bio.PDB.PDBIO import PDBIO
 from puzzles.puzzle_help import pdb_to_fasta
+from Bio.PDB import *
+from streamlit_dimensions import st_dimensions
+import streamlit.components.v1 as components
+import ipywidgets as widgets
+from ipywidgets import embed
+import py3Dmol
+import ipyspeck
 
 def get_chains(system):
     chains=[]
@@ -20,17 +27,20 @@ def get_chains(system):
     return chains
 def vis_chain():
     pdb_code = st.session_state["code"]
-    pdb_content = fetch_pdb_content(pdb_code)
-    view = py3Dmol.view(width=800, height=600)
+    pdb_content = fetch_pdb_content(pdb_code[0:5])
+    #container_width = st_dimensions(key="main")["width"]
+    container_width = 850
+    view = py3Dmol.view(width=container_width, height=600)
     system = "".join([x for x in pdb_content])
     view.addModelsAsFrames(system)
 
-    #set up overlay interface
-    c0 = 'https://lh3.googleusercontent.com/pw/AP1GczMZOGDttrtnn2F1iM9z38YOE17aP5PFrSe7OnRZxlFUHIkvgXCPIBbHZPOB_gooW2J7YBJGmwToN-WeSCBSnHukoABNKSET6U4mpwV_jDyoDVKtQdDZ6Suw3etpm0XWSBM_Rc5aV8fu_51skX9cEyhmiOC3k2gyx1N3qlnx9giWBpzMsLJkc-2fvVEmlQjZ4txTVJPXmkIWew_k61s9J4jNUuH9augnQDkwbPZGNTDgUmN6NxiCii2jz_h16PaYzMwdoWjyqDO_PwhqDTUo-MU1TAz2KmYr6PjdIjdShZnz3k5sieP6ewvUZjGCXshi7dTCkNJRq7zKx3yUPjOR5p2fvwEq0EkuBWRG1liFbLpTqApYE2t42N2G-DdkYNiyESPLUgbE7shgdz2NfRobayAMNGYcX5hHjJI5ayIY6Uvhx67b6M8NmCKpJADJzPOT7krs7lwOhisiPtjkTro-dYplXGrAnKbHjZk23xyCIj_mVtWkYYAOz4reqCCZvQDeF7GghFgVUVltw9SSWf5_KCnfX8NstHMaR2GHUJ6-lX4unqZ-RzdM4U4qbBZYC_JH_OpaMApXmWKDnSTkP9k5PldlrIjCUJKE4XvzehGtHDVsA-iBexQwOrX_-F9MyTSt2H5XVfXdDc-7k0-_tt7W77YKQMWqwBiIGmtGlxgRNKaE8CtSr9RPJuFYB6pZ1JeO0R1AmUnSphLbSYYznkRBDKqFz6v8mlZvs1Ja5inWpaeIWbOXNMuu1msYm-K0gk-QT1ZO0kUBTb0nvky89sQBXKaCzDOzfpc_zP0uK5RP9GXllWzh5GT8tkV61wwpjnHkO8EC4j6IMhRUMvS8FWKStvcJ1uHQ34vnHz6RvCU82MEtM_z_t1mkXrenj7n3HTUf83ftKnH_9C3X-6uxxh0=w1920-h1080-s-no-gm?authuser=0'
-    c1 = 'https://lh3.googleusercontent.com/pw/AP1GczNaryjartSJ-Wl7TuQ1z5B1bPlzCzmRXxAM_aTdm_0R5j98g8-BQyMhhsgfuXy0abvd6s3HhPaq3azQhT9i09uYLpOn9IunMCCOXuvtK4xttf8jEEVrcfsCs5B9VTSStNcubKZqvNs9O6Cpe4Yb2zNqv-EFEo3i_d6kk20AtYCaqLhZfQ-K6cWGKD7IfeZ0ZabMetDOAk5zD2kh09D7yVsDs-KSTKxSjfw900pVFyBAeIbxhHHbtUYlXOfpAuAPUzS5IVdtrpNaJVwJIsjQfvl668-q9fA34eelN8X94Ocq-9kjUnGSYaYePtbPfSqz5Z72AYUFUxfAiRGp4khxxuh3MRcoAb9PJZ63ByXi1dq1WXmEAyVsKvhmVc4V77zLZMaCqa3tC9H0NU3nP8Ir5-oa5PkB0C7usIyEClW7WROd9GGf6K1c4OO3n39Jb2pWuIaFBuVvBceLDcVXO_i00PbNS8gcqL4OwnXp37Xgw4aafcDP9yY9LsCqkWhKhNPhlx1zFhT0c9kuU0Z1cIM_lH4WXVPO4wxF3aDxsC6qFM_nP0NZY72FKzmdOq_mUI8qf_eQHkCrvWayeiSYyMpuCz6LS9NCuNhk8jUuyDRdHXruyJo770PDSS0aALpPfLQ664yczmjOQUswzgQMwtZlefj51x1v1NAuRk0XUoOFEpVnMqFrFJ-mmG8OED3LRiicG66Dcso3VrkBhdwFoZfeQ1aSIh5GQPwgnEMh_7e2DGB-jYOIZ3y1itMVhjc7628ePReVL3_zVKO98ZIX5ZoqGfKn_yyDvOD6ozsoj9QWLN-Bco9rFloETuoLcCD_FgXEUryAYvrOcclPZx016c0V0oSC7znXURK6pyPMvgMtcem0lCKp8_T5ykQgIGpYacxXmD0eqPWmOotwFB4xYP4=w1920-h1080-s-no-gm?authuser=0'
-    c2 = 'https://lh3.googleusercontent.com/pw/AP1GczMyN4c5kDyPDoiaCnFEW61C3EUZm_5A_oy3fgGnb9ow6pBQsuUq88lYhjH4GJhiUzeXmUkDNXwvrc4whHrreUhN7YVoJ9XfRn5BOIal3mjcXEN6_bP4I8KU7VPRqdfvkqSwVidi_5IrUu5z7qYW3kfkRtsO7SbM3H2J5w1xqXTOSLwr7DDYsG4nEpj5SI7IF14f899IKSiTtRIOuBI4F_lFbdgOGeM5-YMvbuPPNwOuhPku0NTOl-9WRgIeQZlg79um0sm6givpcs7bdFdPPsJbTnt6Oy7m2JgskvxvNhx93UyxbWYl_rRyMUSvmvBfOT1wLY47E14Iibhhc4vd_dgGFUufIUSdymlEtOu0NXbhFW-Xx44AHjb648UtV_GljkHy2OPUua3ysYrxhkroQAHL5AzxTT6huburaKdP4xHVVcHG_yndP8KGUK3bNB7xiErdA_qfgM-gaTWl1xj9ECJJIU_SBHIDLmvV2Ft1ytJg-Y7-AqirLsr7UJF7AiD5SJeg1PcJKrH4OlT0IICL2e1wBsLiNUY3M4UWefQkPJbTP802WdvvLfOA7ThadoZzth2EGQcTvmUDbNVub16kLyrUktxfVQER2RDYogPXqRN8vcwGdtyu3uASQIP8SQrmkTtrrYuqhLVTvdnegjiDuT6bGv3olWkAlWwROSXRRq3EqjGXG5pEd0PiZ2N5q--EXl5ZsS2335qccpKC9SzXaRLuEFgjM__ZE9E0wgY75ChdGa2u7CPKNA5eQyOT1K-vdG7bh85hqmNEPJl6oz9EMlbIB7xwHyQWFNupr_Tk1zASlhfJSQh3vRPEN4kW6LFBmN4RVa01fsbpQIK9_Co81tLBYTWAQ5zQ3MKjg_s0O9u7AEV6NA5_HEVBHxGjG9aQj8gmkc42JEkumFkrRBw=w1920-h1080-s-no-gm?authuser=0'
-    c3 = 'https://lh3.googleusercontent.com/pw/AP1GczMQwRk9-H7BHL4oBwdeFDkId6iqyoLVCDNFcKUFrT9a3oyl9kcVf0h4bcbK5fJAS9eL7cOPyS1zaISEOpVqOIhaeyafje1dYlrtFmC39dPZnN7cyeexZTkJKBjf0FcPn1FyPXTQ_iMX56WOC5F43mkIFbos9tQmj6DVIUBZ-82QDVyQw-3s1sVEFaKNmM404NJ002vULF_4uueiDyaB1tWd6Jv4GSjtJSEZqz1-nZUIwGnzeHSGB_06xFXigJ28JfaSTU2tNlcau4McsxqIYBn41RRuAuZ0M19wsSCcCw-8Dhs9WppDb3p1IFwb3gBp84vInMOfFgKSqmPrhY8wcvyJqnDPFnly1QHT9CZKD93wCpnYWSc0C__GEoamRjNx-9S0tp-U_qL9I5wAcn8V8YUrUyKy78qA8qDA1wnKUXrOEaegYf2cCOqOeU0GdC5q010vUxEriADG01zXUV0EbsZNQEFzAbTgxrOCjJnI_8RHqo1Cf1v7wKmXURcBcZr4h78v1-0UEZUA9_9IgQ-8sCIP39UkYPGMf0PMUHxbVVtre3UiNLRLtQVqQuByX1KvzozDxME1hen1EgvftnF8TcR6DP8y_-vKnQ8kJSfRq8yuKl894ONvaDXCD5cHQvcyL9vVBZzZsRhG_Nk1YVOfTAb9NOx7JhspZLsc2Oj-99ZF1XUbcUskQI5IYiSxPVl1w54cjG-7mrwTFThXHo4m1CLx6gbQRFHuyUTRVvErZnWMfQoV1o0KSg94v5mPFy_u4yBUpg4OwYlg8n_9oJAOZ-Sp8XpcjhozRT9BQ9egb865lSA0DLNg8HMbcL879hJhIUlfJnPjK41voBXn1n_VtjdS51fCsePjVghSplcMOlgXsN4BTjouMIDxLNku6Qgwywtz4TcRwI0vnhIiR_8=w1920-h1080-s-no-gm?authuser=0'
-    c4 = 'https://lh3.googleusercontent.com/pw/AP1GczMFwcCnpjHpGFAgZhQx69RklP_tlWkU3D_uoe84XVykxCr7zJboni3TbGpsrG4H4R6_lmZV2EbrUkK6uUXeO4XtMEULpIGTlAwbzJw17SAfkmrXnbKsZS5SnL9lJKvb0Twr3kn-ZwykLNo_a6iCSY2fIJuQQHNwV4Hbmxn6hMPYyYTFJiJPZ1uaKgfM6E__v7i1Jwsky6g0urGsfnufeEZdtzOOYs0bQCW5H-j0ZZCxudTfvEc-XhHf5m9I7eUw9tOKPKTDmPhUFqakLR3i-d9vppb5tIOxIt-u02JB6dJpGAipeV-e5PpbG1oqwHzATuJlBn4EamX4tCRkwAqWSgyJzke3tbY9P2ZqZCyMiRRSHuocl3j698k8IZkJ-kLR1BY6aZU0dBUJjDat8FXKfWbYv9CVRnp3Nv-vF1oWLk-s3rgYtGGN-7wKQNafNDndz4-jSSrqupB7fW2O7GDsKEqKebBo_V-fG6HzV_cgAocLNsSRsA7ypXLDAzcYjV66fh3eZbYXbi4vAGX4o1gItHzTiVzwUbXb01uS4tjPiODqEmTRRrsslJPvMd3q3PQQQknJwuMMFQqNCn9P74Xmi5pfpZ6DsEaBz6xa-nkVUqEbWE0AemQ3YjPsNGMs5zWzUnylIoAmud-tStlHE09dCKamvukMHRZe-WI-YDFf2wPdz_tAIO58USt4-_pLEf9DdM-XiAPx20GMiACUIDz6neQW8j1plpGbGyHVUyA1mSAnH1ucgNrEjpr2O9OutIgIqeg5vDk1SAQb9mfpSzIKaGfkPQy59sRi3ZGaWTRbjMJvVQ1NwomZoLtwRntpRWGJ5q4ymCflos3SEC8JZ-xRMj_8pPu0jUhFY6ucsAL2z2GoNy7MUfqCGzMBBnf6e_PbNNDz21Y0kSFK6h5utYM=w1920-h1080-s-no-gm?authuser=0'
+    st.caption("Source: " + system.split('\n')[1][6:-1])
+    
+    c0 = 'https://lh3.googleusercontent.com/pw/AP1GczMXgqPFYsqjT33Yois55JinybhKc3ZmWUOQHKiHOJ6dZAkHYFxyPknh0bCQ2LUi1aL4Kl0fxjJ_z4ix7NfTBsRvs3kSqaSRTqWTKkCv2IcCSSXIGbvMaSLZjufz1T7KnWDxRVvx2LkuWGOaabhWHhT8AiIuS2HseQgxnxAMos_bWyGhTdRv4HoxhhkjwZJGIkvfTNtPpVtEQnRnOk3xas2RSgy405xEGUCg9rJwxHAXYXPOpVj3OxsXJuxjycUTYTx-abL156DcVwwCXcLNXZY_4STONLm4_vobMjFaog1hJ9B29xTcCWTCE6Qspy1ZpAmOYHgs5Enm7hHmA5kAPK-LK1_Iq4tOEdJCxLmMd3u8sZWt83sVI4epqpyAtHc7kbV_k4wmGnrryYuMWZ0fq-n9SmmVGxaaF9u5Isv-fzvcNJdIkuv9eoCxWhvs-x6D1YjmiQDy7ixW_QPRfWYUo-E0_q_EvmHay3zaub_N7YiiWYoIiTZxfX7wtP-ap-Qg9eyXWQBgbDl60YeD8O5P0LHqm04N41waiVgI0WM7ozjNq2DDuM4OmTGWxYBsikLwVrpAf_DUZh7qeibUpePF-BT5fzrJVnDPGnk0spMOebAB999STaY2xfRhe3sw-HmkmCFMkE_oBp8GJRpLXM4jSf4_c5KoTjdzESLeyjv5mFRtfiE63zIJaQNud1xZLa5wgncue40IL8UADLUzJ89jn3mfnCEgweEgos8lOIwI4yia3isXt8fe1FvaqiRI8sLaNDoDVCkR6DbbU7xyF1G5gvRtqorHAl-EuALfSV5TqMcojsY3ioIh0xZxL6zV5-U5uBegeYahSQVIihW2kPhTrGK80Lrf5ofr38hhHozrWPeInbrN_NpcW4RiwJtrosWyeGpSrdwlARPvt0hfVeg=w1920-h1080-s-no-gm?authuser=0'
+    c1 = 'https://lh3.googleusercontent.com/pw/AP1GczPErbXtIuHffPuPIaZfdAq5pff3pucCOC23SR6Ye_FAbLhkO4_nUtg1rO9Ha7PMaz87eidypjXqIb3_1SFxPXcuwfEBZeB4HnU4FMLbcPpMEvEQ3dp7bnjAVBMdTNj--KcgIxtPBUn74hM-SBmCmWAJYGPuNSXw2JTaZ-6nzUVDVmtgCsSKmtrXm-41d_Ww2a64rCWqpc2njMbs_9E1VLSivNxlWVYk4Ap4nsvyy2PW4h5Vyej7mBnGPKbyDn6HprG-luB_h16Mwo-_LZd0XjnjVTc_MAEyVQOvDAs24z9h39qlE6YoRLoZ8lxB1RKmNFvQOgIAm9AwyNWK_qdM-rTr6eVFZZeJhbswyrbQ3ZKAFfASYnLIltW-9R-odUrGMkh36lO-0_IuAjdqwyF_Eg4BI1isfiZJ3fCtAU7FmLbb5BA6se8VNe5h1FEeLZX0u1CsTHrK-2Hey9hFQcd-HjKSX4ohNwnxX5bU29WVBELs_yweaPaUgr1wjsLf4zjTid_MXVAa7rfZIZwGC6AeqDCI6oYM4zhspvLdTycH3hiqTx0bRF3MCMev7LQg2El46ts1gvX97uGRg-aKSXx9UwP8JaAa0ndxv-u9uu1psT-k7_3aXEqh_yR2YcamCrAywJ8_1KGgVj_pB_NvAMU8iCnFOm0zAPJzfB3l7hEXy66OE-r6yHJDDzWjI8MdzzGq0daOhC66IPttQpvtQ1lwKstlfVqOnZyqzTI0pQfP8cq8wGsBepmkLnmRYJoeinQSqA_ywnMlFBISI_wW0whjRebFRSicM2uRlwEUmN6zJq7J4uPNl5hJVpI1LeiMge6CHiPNjyBbFvAplMpTmV_EjeIC_hVY59byE_WvqF2vnfZ9o14-ev21xqW6SitV38w17pUUIhDs2Wf-NyEduuw=w1920-h1080-s-no-gm?authuser=0'
+    c2 = 'https://lh3.googleusercontent.com/pw/AP1GczOFA9rlWelpFMaMocOsoQZCw1BgzIE1aM18FScjv3H1O_CEQwQ3TU9EKpJIZmR9o42q79DYQ5hTe0O4b_LxABdPiyLF8AVqMlCVFKxSA-htpkzlIjcAX0U9Fc8QTc0CK4-27HYof0E44nX3jsu2LYm_MUnSvm0UekYYDdcRRCm98zfUyMPaTqrmphWwJW_8-FlLhhC-57jyw4rWhzXdzQ0IGsqQJgUCvso90PTxUt5v8A9rHT1Kg792p6_joRFe5OBnPDmJrFVNeldHI11Yg3jCz0eZv1yM8R1S9cG7qOWlt4T-Y4MqrGeNnojS2Ztf3GUPm8G1ri1jEo31Oxz1QTQ7DoOhAWcZ9ZqVQr6ihd_M-5euchgicC17wRyxiMMDBuxE7DTbKElABPG9WH450h657_isK1MKNn15myqa12PZ-htjRwNl_NfwSE_OHKSrLjfR1sYoEZai4JKektrLEKA7wP5EdTlXqOlgWzDENWO5VcEZiiqPioJYXz-O75sdY-R00w0_B3WLx7Y60OqcJsW-HQbzpaTGhSXv5I9Lcxag0k4gAXCeOXBPeyG670vmfnej90rUGy505oZUhlUUMzo8RFz9BolqKYeUWRX0dJspvEQQhObRAu5WRGTUXr9bsP8BuraNhCO-KKUyYwITXBHfjYfda0yxYPBMOMmdUfSiIGlqBnfLQsxhwAyNvo4cHn-BKwNNxyw5RCL-a6a7XsBTlTKY6uv7ghPkLBc2Y3SQiW8Qt2pYz_rTGnKpD6pc_6iskS68awjAD5-s3jyo8_bTW1Psk9jx4P641EBEFEeR5eT6xVoQ88Y6Hi1sUrz4pIctJPuoWKHqOPtaa2f38iUlIT981OfUeu3F46fUaCUOQxNn5zKApEyENYl68pIps-fTaSEAgfnG9H4-FIE=w1920-h1080-s-no-gm?authuser=0'
+    c3 = 'https://lh3.googleusercontent.com/pw/AP1GczPpMQtOELzrWxA9MRNPyDhFMgPLhtdi769b7jGSZXYETKXbb_38ysoP71DIPNPhwOJahxCrh-Zpzsc8aq_dDXz71qzkKAljwP6G7LgRCjkDfgBV1BbpMWtaQpH8fl31DGSM1ifR4eG9Ndp5cO2GYUAMjuB7mQqNQQn0T3eq3zgzza-uCCq71vk_2SOXNfKA-GND9PdRpHpDFLXyh4PMaOhVaEqj1fTAjyiQ1mHNf32idkSoLRNNYBCNMySRs3hmLY04yRLmqN_XdHVOm3TFeYdIJTg9d_6iYaN_ngBQFGIw2euXjky2Am1ahIWKT1jKvsYMeuLeOSwcZqI5oI414Vkn8DKKZoYo23LiOTLwmH7Pz7mMHFfLdGMKte1hkL9BhsAD7rK0IVmUHLw37E945hE1k9pM5uKu8t0XeTC4EZMbxFVfoXhtsh7M36_EkMOWSxtu8FyPfkwGdf-BIzVJOMOOtXSDP9J9PzS-0YFW4hu_Ef2-A1tVoUok4myHpe5QvAeJtd7YaxCq7r9uwGmV7uqleEEw6uwAJB_IgpqBIKU_A6Dg3PzPgweJz8JvBpO_CYTRg6zcP5SFY1XmY_fAkqNupdTt8esAsBr-yBtgrbPVbaXCCvxriWVu43wZNJOYMJ0b8bbWs6Sj9enrf4jvP0PKIyR3YfYbPPvK-wFD1R9RXQ5YSeeJuQQGPmxqiOrrbJmibYeNh2WGasnrue2LZZ9OjzHrAKoC1XgfzAZAtYghIw-ueR96uR0181ojiSMnmQGTq_lf2fY5nVdkqWNAUmWPcRarcG1JD91xIo4r9xuSNXWctZy4i_Pcbb3J1XxKAI3FjDLjJlF-gz8SPPG5dUc4__Xz1CQ_IY7Q6xwjwPEbx-BI_5_V74xujRImU8PLPHcjYUPWjYigG1Ovkxs=w1920-h1080-s-no-gm?authuser=0'
+    c4 = 'https://lh3.googleusercontent.com/pw/AP1GczOc08CWhOM9MrQGoGaR0AcYA42Yz3UKA7ymXFW4ozuJd36_NKXq_st5-QNWw34RmiE824EXWBch0SXh_fax92l_yaTtU2JjA2djJhI9TkXaBRWYJpwJknAO8ZEfa7nNQGMiajQagoH0GT3ZN3p_TveyHInVMwu8StuHBFAzpokZVsitLhG1wwnKbI5s0f3XrVi-IrBxdSUbxqtliFHBEbnBiyEpAM6oT1c3NRFHq8kxnlrQj1hUIHCHo0eGRjq0ireqEelIFPZiwhFUC-xVv2tVZOHb1CSf-hprh0TP10c91sXpjhpUl91kBVXDhxSSBmVR-zMONU3VNMGVCd_6UzGPpaailpeYOQX1vgej3ojsmvEIe4sJT_cvT_g3mREZ2EnSUQjpkmRJe438CiYVJAMdxRf4BBMFfszb8Aj9CbmijIDO8sXE3rfxhGOSPh93FKbJyx4ScdzuBjXbkwgYcxbdP5iC3POrOESOF3u2I_KdlWvA-BSardj_rpzSkIc9ICJRWeFuseQTa9wGyhMEwwnoCiPafBmbNXT3yFSh2T4992OI4TcH6SvLB3G3N6wDIaYW_Ea8lM7zpalq5-UU-4KiOmQvrl2GJ_u5l3_VjDkcAOOfwSPepmV_lFgVFkQ2g-5Ci4vLuZih7sfbMmNwlMGW4V7erf7swu5jVGn-fGFx0mEm2Jv9bMW6jlr9hAYjA60CxKGWROjMajVQSG4nOCjK9npTvPX1iFi63B7llRBIsDyo7ra_xdhPX-RVJ9INrPGU_eRE92Vum1a0q-zWHV1sEbHhqO0H2dJSBcq0JJBQUoqk-zKsoHx_4VjBMHteEI0Gy6FkR6jtP2Ws5JKt51y45-m-vWBODaanel9Ijl_t5nK1VU7Vh5ASYm4Llo_meRyla27qhN9Pd2yiyOs=w1920-h1080-s-no-gm?authuser=0'
     rows = [
        {"Color": c0, "Sequence": pdb_to_fasta(pdb_code), "Show": True},
        {"Color": c1, "Sequence": pdb_to_fasta(pdb_code), "Show": True},
@@ -63,6 +73,7 @@ def vis_chain():
                     sup(wild_path[0], wild_path[i])
         quick_viz()
     else:
+        st.caption("Sequence: " + pdb_to_fasta(pdb_code))
         chains=get_chains(system)
         with st.sidebar.expander("Visualization Settings"):
             st.session_state["style"]  = st.selectbox('style',['cartoon','stick','sphere'])
@@ -90,9 +101,25 @@ def vis_chain():
             if st.session_state["style"] != 'sphere' and surface:
                 view.addSurface(py3Dmol.VDW, {"opacity": opacity, 'color':'#808080'})
 
-
+    add_hover(view)
     view.zoomTo()
-    showmol(view, height=600, width=800)
+    showmol(view, height=600, width=container_width)
+
+def add_hover(obj,backgroundColor='black',fontColor='white'):
+    js_script = """function(atom,viewer) {
+                   if(!atom.label) {
+                    atom.label = viewer.addLabel(atom.resn+':'+atom.resi,{position: atom, backgroundColor:"%s" , fontColor:"%s"});
+                }
+              }"""%(backgroundColor,fontColor)
+    obj.setHoverable({},True,js_script,
+               """function(atom,viewer) {
+                   if(atom.label) {
+                    viewer.removeLabel(atom.label);
+                    delete atom.label;
+                   }
+                }"""
+               )
+
 import pandas as pd
 def quick_viz():
     

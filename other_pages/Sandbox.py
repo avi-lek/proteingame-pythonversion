@@ -5,7 +5,8 @@ from st_pages import Page, Section, show_pages, add_page_title, hide_pages
 
 st.set_page_config(page_title="Practice", page_icon=":dna:", layout="wide")
 hide_pages(["Transcription", "Identify Mutations", "Translation", "Sandbox Instructions"])
-add_page_title()
+#add_page_title()
+st.header("Sandbox")
 if "instructions_read" not in st.session_state or st.sidebar.button("Instructions"):
     st.session_state["instructions_read"] = True
     st.switch_page("other_pages//Sandbox_instructions.py")
@@ -15,8 +16,8 @@ st.markdown("""
                .block-container {
                     padding-top: 1rem;
                     padding-bottom: 0rem;
-                    padding-left: 0rem;
-                    padding-right: 0rem;
+                    padding-left: 1rem;
+                    padding-right: 1rem;
                 }
         </style>
         """, unsafe_allow_html=True)
