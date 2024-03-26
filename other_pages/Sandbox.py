@@ -34,6 +34,7 @@ options.append("Select From PDB ID")
 st.session_state["code"] = st.sidebar.selectbox("Select Protein",  options)
 if st.session_state["code"] == "Select From PDB ID":
     st.session_state["code"] = st.sidebar.text_input('PDB Code')
+    #MAKE SURE TO DISALLOW INCORRECT CODES
 else: 
     st.session_state["code"] = protein_ids[st.session_state["code"]]
 option = st.sidebar.selectbox('Select View', ('None', 'Hydrophobicity'))

@@ -13,101 +13,88 @@ import random
 from Bio import SeqIO
 from io import StringIO
 
+
+def make_window(rna_seq):
+    window_end = random.randrange(30, len(rna_seq), 3)
+    window_start = window_end-30
+    return window_start, window_end
+
+def substitution(rna_seq):
+    window_start, window_end = make_window(rna_seq)
+    mut_len = random.randint(1,6)
+    mut_start = random.randint(window_start+3,window_end-mut_len-3)
+    mut_end = mut_start + mut_len
+    window = "".join(['-' for n in range(window_start)]) + rna_seq[window_start:window_end] + "".join(['-' for n in range(len(rna_seq)-window_end)])
+    #create_mutation
+    mut_window = list(window)
+    mut_rna = list(rna_seq)
+
+    bases=['A', 'U', 'G', 'C']
+    for n in range(mut_start, mut_end):
+        if mut_window[n]!=mut_rna[n]:
+            print("ALL FUCKED UP")
+
+        c=mut_rna[n]
+        while c==mut_rna[n]:
+            c = random.choice(bases)
+
+        mut_window[n]=c
+        mut_rna[n]=c
+    
+    mut_window = "".join(mut_window)
+    mut_rna = "".join(mut_rna)
+
+    return remove_nonalpha(mut_window)[0:30], mut_rna, remove_nonalpha(window)[0:30], rna_seq, mut_start, mut_len
+
+def remove_nonalpha(n):
+    return "".join([i for i in n if i.isalpha()])
+    
+def insertion(rna_seq):
+    window_start, window_end = make_window(rna_seq)
+    mut_len = random.randint(1,6)
+    mut_start = random.randint(window_start+3,window_end-mut_len-3)
+    window = "".join(['-' for n in range(window_start)]) + rna_seq[window_start:window_end] + "".join(['-' for n in range(len(rna_seq)-window_end)])
+    
+    #create_mutation
+    bases=['A', 'U', 'G', 'C']
+    inserted_seq = "".join([random.choice(bases) for n in range(mut_len)])
+    mut_window = window[:mut_start] + inserted_seq + window[mut_start:len(rna_seq)]  
+    mut_rna = rna_seq[:mut_start] + inserted_seq + rna_seq[mut_start:] 
+    return remove_nonalpha(mut_window)[0:30], mut_rna, remove_nonalpha(window)[0:30], rna_seq, mut_start, mut_len
+
 def mutate(rna_seq):
     n = random.randint(1,3)
     mut_bool = True    
-    counter=0
-    while mut_bool:
-        if n==1:
-            mut_window_seq, mut_seq, window_seq, rna_seq, mut_start, mut_len = insertion(rna_seq)
-            mtype = "i"
-        elif n==2:
-            mut_window_seq, mut_seq, window_seq, rna_seq, mut_start, mut_len = deletion(rna_seq)
-            mtype = 'd'
-        elif n==3:
-            mut_window_seq, mut_seq, window_seq, rna_seq, mut_start, mut_len = substitution(rna_seq)
-            mtype = 's'
-        if len(mut_window_seq)==30 and len(window_seq)==30:
-            if window_seq[0:2]==mut_window_seq[0:2] and window_seq!=mut_window_seq:
-                mut_bool=False
+    if n==1:
+        mut_window_seq, mut_seq, window_seq, rna_seq, mut_start, mut_len = insertion(rna_seq)
+        mtype = "i"
+    elif n==2:
+        mut_window_seq, mut_seq, window_seq, rna_seq, mut_start, mut_len = deletion(rna_seq)
+        mtype = 'd'
+    elif n==3:
+        mut_window_seq, mut_seq, window_seq, rna_seq, mut_start, mut_len = substitution(rna_seq)
+        mtype = 's'
 
-        #print(window_seq[0:2] + '|' + mut_window_seq[0:2])
-        #print(window_seq[::-1][0:3] + '|' + mut_window_seq[::-1][0:3])
-        #print(mut_window_seq)
-        #print(window_seq)
-        counter=counter+1
-        #print(counter)
     return mut_window_seq, mut_seq, window_seq, rna_seq, mut_start, mut_len, mtype
 
 
 
-def insertion(rna_seq):
-    mut_len = random.randint(1,6)
-    mut_start = random.randint(0,len(rna_seq)-(2*mut_len))
-    mut_end = mut_start+mut_len
-    
-    if len(rna_seq)-30 < (mut_start-3):
-        max_ws = len(rna_seq)-30
-    else:
-        max_ws = (mut_start-3)
-    window_start_index = random.randint(mut_end-30, max_ws)
-    window_end_index = window_start_index+30
 
-    window_seq = rna_seq[window_start_index:window_end_index]
-
-    bases=['A', 'U', 'G', 'C']
-    mut_seq = rna_seq
-    added_seq = []
-    for n in range(mut_len):
-        added_seq.append(random.choice(bases))
-    mut_seq=mut_seq[0:mut_start]+"".join(added_seq)+mut_seq[mut_start:len(mut_seq)]
-    mut_window_seq = mut_seq[window_start_index:(window_start_index+30)]
-
-    return mut_window_seq, mut_seq, window_seq, rna_seq, mut_start, mut_len
 
 def deletion(rna_seq):
+    window_start, window_end = make_window(rna_seq)
     mut_len = random.randint(1,6)
-    mut_start = random.randint(0,len(rna_seq)-mut_len)
+    mut_start = random.randint(window_start+3,window_end-mut_len-3)
+    window = "".join(['-' for n in range(window_start)]) + rna_seq[window_start:window_end] + "".join(['-' for n in range(len(rna_seq)-window_end)])
+    mut_end = mut_start+mut_len
+    #create_mutation
+    mut_window = window[:mut_start] + rna_seq[mut_end:]  
+    mut_rna = rna_seq[:mut_start] + rna_seq[mut_end:] 
+
+    return remove_nonalpha(mut_window)[0:30], mut_rna, remove_nonalpha(window)[0:30], rna_seq, mut_start, mut_len
     
-    m = True
-    while m:
-        try:
-            window_start_index = random.randint(mut_start-30+mut_len, mut_start)
-            m=False
-        except:
-            m=True
-
-    window_seq = rna_seq[window_start_index:(window_start_index+30)]
-
-    mut_seq = rna_seq
-    mut_seq=mut_seq[0:mut_start]+mut_seq[(mut_start+mut_len):len(mut_seq)]
-    mut_window_seq = mut_seq[window_start_index:(window_start_index+30)]
-    return mut_window_seq, mut_seq, window_seq, rna_seq, mut_start, mut_len
 
 
-def substitution(rna_seq):
-    mut_len = random.randint(1,9)
-    mut_start = random.randint(0,len(rna_seq)-mut_len)
-    
-    m = True
-    while m:
-        try:
-            window_start_index = random.randint(mut_start-30+mut_len, mut_start)
-            m=False
-        except:
-            m=True
-
-    window_seq = rna_seq[window_start_index:(window_start_index+30)]
-
-    bases=['A', 'U', 'G', 'C']
-    mut_seq = rna_seq
-    added_seq = []
-    for n in range(mut_len):
-        added_seq.append(random.choice(bases))
-    #change later to not substitute in identical bases
-    mut_seq=mut_seq[0:mut_start]+"".join(added_seq)+mut_seq[(mut_start+mut_len):len(mut_seq)]
-    mut_window_seq = mut_seq[window_start_index:(window_start_index+30)]
-    return mut_window_seq, mut_seq, window_seq, rna_seq, mut_start, mut_len
 
 
 def amino_acids_to_rna(amino_acids):
