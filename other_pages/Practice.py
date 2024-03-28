@@ -2,10 +2,10 @@ import streamlit as st
 from stmol import showmol
 from practice_functions import *
 import pandas as pd
-from setup_puzzle import *
+from puzzles.setup_puzzle import *
 from st_pages import Page, Section, show_pages, add_page_title
 from st_pages import hide_pages
-st.set_page_config(page_title="Mutations Practice", page_icon=":dna:", layout="wide")
+st.set_page_config(page_title="My Protein Is Broken!", page_icon=":dna:", layout="wide")
 hide_pages(["Transcription", "Identify Mutations", "Translation", "Sandbox Instructions"])
 add_page_title()
 st.markdown("""
@@ -41,5 +41,7 @@ st.markdown("3. Frameshift mutations: When insertion and deletion of a number of
 st.markdown("On top of these, repeat expansions lead to genetic disorders because it increases the number of repeated DNA sequences within a gene. In addition, chromosomal mutations such as translocations affect gene function by altering the structure of the protein or amount of chromosomes.")
 
 st.markdown("**If you understand central dogma and mutations, and you feel ready to start the puzzle, click on the 'Start Puzzle' button in the sidebar.**")
+
+
 if st.sidebar.button("Start Puzzle"):
     st.switch_page("other_pages//Transcription.py")

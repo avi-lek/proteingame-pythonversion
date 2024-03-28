@@ -4,9 +4,9 @@ import pandas as pd
 
 labels = ['pdb_id', 'w_aa', 'w_rna', 'w_rna_window', 'm_rna', 'm_rna_window',"m_start", "m_len",  "m_type"]
 data = pd.DataFrame(columns=labels)
-file = open("puzzles/rcsb_pdb_ids.txt", "r")
+file = open("rcsb_pdb_ids.txt", "r")
 content = file.read(34504)
-for n in range(30):
+for n in range(100):
     index = random.randrange(4,34504)
     for i in range(5):
         if content[index-i]==',':
@@ -24,6 +24,6 @@ for n in range(30):
        "m_len":mut_len,  
        "m_type":mtype}
     data.loc[len(data)] = row
-    print(str(n/10)+"%")
-data.to_csv("puzzles/puzzle_table.csv")
+    print(str(n)+"%")
+data.to_csv("puzzle_table.csv")
 file.close()
