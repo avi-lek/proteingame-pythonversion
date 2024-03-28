@@ -69,6 +69,7 @@ def vis_chain():
         color_vals = st.column_config.ImageColumn("Color")
         st.session_state["edited_df"] = st.data_editor(df, use_container_width=True, hide_index=True, column_config={"Color": color_vals})    
         for i in range(st.session_state["num_overlays"]+1):
+            
             if bool(~os.path.isfile(wild_path[st.session_state["num_overlays"]])):
                 get_esm_pdb(st.session_state["edited_df"]["Sequence"][i], ("sandbox"+str(i)))
                 if i !=0:
@@ -123,8 +124,12 @@ def add_hover(obj,backgroundColor='black',fontColor='white'):
                )
 def add_hover_with_color(obj):
     js_script = """function(atom,viewer) {
-                   if(!atom.label) {
-                    atom.label = viewer.addLabel(atom.resn+':'+atom.resi,{position: atom, backgroundColor:"black" , fontColor:atom.style.cartoon.color});
+                if(!atom.label) {
+                    if(atom.style.cartoon.color!="black"){
+                        atom.label = viewer.addLabel(atom.resn+':'+atom.resi,{position: atom, backgroundColor:"black" , fontColor:atom.style.cartoon.color});
+                    } else{
+                        atom.label = viewer.addLabel(atom.resn+':'+atom.resi,{position: atom, backgroundColor:"black" , fontColor:"white"});
+                    }
                 }
               }"""
     obj.setHoverable({},True,js_script,
@@ -151,6 +156,7 @@ def quick_viz():
             view.addModel(open(wild_path[i], 'r').read(),'pdb')
             view.setStyle({'model':counter}, {st.session_state["style"]: {'color': colors[i], 'opacity': 1}})
             counter = counter+1
+    add_hover_with_color(view)
     view.zoomTo()
     showmol(view, height=600, width=800)
 
@@ -247,17 +253,19 @@ def vis_hb():
     # Add protein structure to the view
     system = "".join([x for x in pdb_content])
     view.addModelsAsFrames(system)
+    st.caption("Source: " + system.split('\n')[1][6:-1])
 
     #legend
     with st.sidebar.expander("Hydrophobicity Legend"):
-        st.color_picker(label=">4", value="#ff3300", disabled=True)
-        st.color_picker(label=">= 3.0", value="#ff9900", disabled=True)
-        st.color_picker(label=">= 2.0", value="#ffcc00", disabled=True)
-        st.color_picker(label=">= 0.0", value="#ffff00", disabled=True)
-        st.color_picker(label=">= -0.9", value="#ccff00", disabled=True)
-        st.color_picker(label=">= -1.9", value="#99ff00", disabled=True)
-        st.color_picker(label=">= -2.9", value="#66ff00", disabled=True)
-        st.color_picker(label=">= -3.9", value="#33ff00", disabled=True)
+        st.image('screenshots//h_key.png')
+        #st.color_picker(label=">4", value="#ff3300", disabled=True)
+        #st.color_picker(label=">= 3.0", value="#ff9900", disabled=True)
+        #st.color_picker(label=">= 2.0", value="#ffcc00", disabled=True)
+        #st.color_picker(label=">= 0.0", value="#ffff00", disabled=True)
+        #st.color_picker(label=">= -0.9", value="#ccff00", disabled=True)
+        #st.color_picker(label=">= -1.9", value="#99ff00", disabled=True)
+        #st.color_picker(label=">= -2.9", value="#66ff00", disabled=True)
+        #st.color_picker(label=">= -3.9", value="#33ff00", disabled=True)
 
     with st.sidebar.expander("Visualization Settings"):
         st.session_state["style"]  = st.selectbox('Style',['Cartoon','Stick','Sphere']).lower()
@@ -280,6 +288,7 @@ def vis_hb():
     if st.session_state["style"] != 'sphere' and surface:
         view.addSurface(py3Dmol.VDW, {"opacity": opacity, 'color':'#808080'})
     # Zoom to protein and show view
+    add_hover_with_color(view)
     view.zoomTo()
     showmol(view, height=600, width=800)
 
