@@ -210,7 +210,7 @@ def transcript_dogma():
             place1.empty()
         else:
             st.error('Incorrect Transcription', icon="🚨")
-            st.write(st.session_state["puzzle_info"]['w_rna_window'])
+            #st.write(st.session_state["puzzle_info"]['w_rna_window'])
             st.session_state["input_checks"][0]=False
             
     st.divider()
@@ -247,7 +247,7 @@ def transcript_dogma():
             st.session_state["input_checks"][1]=True
         else:
             st.error('Incorrect Transcription', icon="🚨")
-            st.write(st.session_state["puzzle_info"]['m_rna_window'])
+            #st.write(st.session_state["puzzle_info"]['m_rna_window'])
             st.session_state["input_checks"][1]=False
     if st.session_state["input_checks"][0]==True and st.session_state["input_checks"][1]==True:
         st.switch_page("other_pages//Translation.py")
@@ -360,7 +360,7 @@ def translation():
         st.switch_page("other_pages//MutationQuiz.py")
 
 def select_mut_type():
-    st.write(st.session_state.select_mut_type)
+    #st.write(st.session_state.select_mut_type)
     if st.session_state["select_mut_type_bool"]!=None:
         if st.session_state['puzzle_info']["m_type"][0].upper() == st.session_state.select_mut_type[0]:
             st.session_state["select_mut_type_bool"]=True
@@ -387,7 +387,7 @@ def mut_quiz():
                 check_substitution()
         else:
             st.error('Incorrect', icon="🚨")
-            st.write(st.session_state['puzzle_info']["m_type"][0].upper())
+            #st.write(st.session_state['puzzle_info']["m_type"][0].upper())
 import time
 def check_insertion():
     w_dna = "".join(st.session_state["df_w"].iloc[0].tolist()[1:])#[3:]
@@ -407,7 +407,7 @@ def check_insertion():
             st.switch_page("other_pages//Practice.py")
         else:
             st.error('Incorrect', icon="🚨")
-            st.write("You Inputed: "+ del_seq)
+            #st.write("You Inputed: "+ del_seq)
             #st.write("Your Answer: "+ w_dna[0:len(del_seq)])
 
     
@@ -429,7 +429,7 @@ def check_deletion():
             st.switch_page("other_pages//Practice.py")
         else:
             st.error('Incorrect', icon="🚨")
-            st.write("You Inputed: "+ del_seq)
+            #st.write("You Inputed: "+ del_seq)
             #st.write("Answer: "+ m_dna)
 def check_substitution():
     w_dna = "".join(st.session_state["df_w"].iloc[0].tolist()[1:])
@@ -454,7 +454,7 @@ def check_substitution():
                 st.switch_page("other_pages//Practice.py")
             else:
                 st.error('Incorrect', icon="🚨")
-                st.write("You Inputed: "+ output)
+                #st.write("You Inputed: "+ output)
                 #st.write("The Answer: "+ m_dna[0:30])
 
 
