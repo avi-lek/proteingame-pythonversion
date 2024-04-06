@@ -1,0 +1,27 @@
+[[pages]]
+path = "Home.py"
+name = "Home"
+
+[[pages]]
+path = "other_pages//Sandbox.py"
+name = "Sandbox"
+
+[[pages]]
+path = "other_pages//Sandbox_instructions.py"
+name = "Sandbox Instructions"
+
+[[pages]]
+path = "other_pages//Practice.py"
+name = "Mutations Practice"
+
+[[pages]]
+path = "other_pages//Transcription.py"
+name = "Transcription"
+
+[[pages]]
+path = "other_pages//Translation.py"
+name = "Translation"
+
+[[pages]]
+path = "other_pages//MutationQuiz.py"
+name = "Identify Mutations"

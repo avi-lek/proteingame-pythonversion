@@ -4,9 +4,6 @@ import pandas as pd
 import os
 import random
 
-#def get_subsect(wild_rna, mut_rna):
-    #for i in range()
-
 def rna_to_amino_acids(rna_sequence):
     codon_table = {
         'UUU': 'F', 'UUC': 'F',

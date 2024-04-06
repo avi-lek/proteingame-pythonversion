@@ -4,7 +4,7 @@ import requests
 import urllib
 import py3Dmol
 from stmol import showmol
-from model import *
+from utils import *
 import os
 import Bio
 from Bio.PDB.PDBIO import PDBIO

@@ -7,11 +7,10 @@ from Bio.PDB import Superimposer, PDBParser
 import numpy
 from Bio.SeqUtils import seq1
 from Bio.PDB.PDBIO import PDBIO
-from model import*
+from utils import*
 import os
 import pandas as pd
 from puzzles.puzzle_help import amino_acids_to_rna
-from rna2aa import *
 import random
 from puzzles.puzzle_help import *
 from get_puzzle import *
@@ -36,7 +35,7 @@ def vis_overlay():
         placeholder = st.empty()
         with placeholder.container():
             with st.form("form"):
-                st.write("Below is the mutated protein (red) compared to the non-mutated protein (green). Due to a mutation in the DNA, the mRNA sequence is also shifted. Since mRNA is transcribed into amino acids, the amino acid sequence of the protein is also shifted, resulting in structural changes. To view the impacts of this mutation on amino acid sequence, transcribe the mRNA sequence in the table using the codon chart in the sidebar.")
+                st.write("Because of mutations in the DNA and mRNA sequences, the resulting polypeptide is also mutated, leading to structural changes in the protein. To view the impacts of this mutation on the amino acid sequence, translate the mRNA sequences transcribed from before using the codon chart in the sidebar.")
                 if st.form_submit_button("Close"):
                     st.session_state["info1"]=True
                     placeholder.empty()
@@ -210,7 +209,7 @@ def transcript_dogma():
             place1.empty()
         else:
             st.error('Incorrect Transcription', icon="🚨")
-            #st.write(st.session_state["puzzle_info"]['w_rna_window'])
+            st.write(st.session_state["puzzle_info"]['w_rna_window'])
             st.session_state["input_checks"][0]=False
             
     st.divider()
@@ -219,8 +218,7 @@ def transcript_dogma():
         placeholder = st.empty()
         with placeholder.container():
             with st.form("form2"):
-                st.write("Because of mutations in the DNA and mRNA sequences, the resulting polypeptide is also mutated, leading to structural changes in the protein.")
-                st.write("To view the impacts of this mutation on the amino acid sequence, translate the mRNA sequences transcribed from before using the codon chart in the sidebar.")
+                st.write("Below, the wild-type DNA sequence has been mutated. Transcribe the mutated sequence below into mRNA.")
                 if st.form_submit_button("Close"):
                     st.session_state["info2"]=True
                     placeholder.empty()
@@ -247,7 +245,7 @@ def transcript_dogma():
             st.session_state["input_checks"][1]=True
         else:
             st.error('Incorrect Transcription', icon="🚨")
-            #st.write(st.session_state["puzzle_info"]['m_rna_window'])
+            st.write(st.session_state["puzzle_info"]['m_rna_window'])
             st.session_state["input_checks"][1]=False
     if st.session_state["input_checks"][0]==True and st.session_state["input_checks"][1]==True:
         st.switch_page("other_pages//Translation.py")
@@ -387,7 +385,7 @@ def mut_quiz():
                 check_substitution()
         else:
             st.error('Incorrect', icon="🚨")
-            #st.write(st.session_state['puzzle_info']["m_type"][0].upper())
+            st.write(st.session_state['puzzle_info']["m_type"][0].upper())
 import time
 def check_insertion():
     w_dna = "".join(st.session_state["df_w"].iloc[0].tolist()[1:])#[3:]
@@ -436,26 +434,27 @@ def check_substitution():
     m_dna = "".join(st.session_state["df_m"].iloc[0].tolist()[1:])
     result = text_highlighter(
         text=w_dna,
-        labels=[("Select Substituted Sequence", "#faffc9")],
+        labels=[("Select Substituted Bases", "#faffc9")],
     )
-    insert = st.text_input("Substitued Sequence", max_chars=30)
-    if len(insert)!=len(result[0]["text"]):
-        st.warning("Both sequence must have equal length for substitution.")
-    else:
-        output = w_dna[0:result[0]["start"]]+insert+w_dna[result[0]["end"]:]
-        output = "".join([n for n in output if n.isalpha()]).upper()
-        if len(result)>0:
-            if output == m_dna[0:30]:
-                st.success("Correct!")
-                for key in st.session_state.keys():
-                    del st.session_state[key]
-                st.balloons()
-                time.sleep(3)
-                st.switch_page("other_pages//Practice.py")
-            else:
-                st.error('Incorrect', icon="🚨")
-                #st.write("You Inputed: "+ output)
-                #st.write("The Answer: "+ m_dna[0:30])
+    insert = st.text_input("Substitued Bases", max_chars=30)
+    if len(insert)>0 and len(result)>0:
+        if len(insert)!=len(result[0]["text"]):
+            st.warning("Both sequence must have equal length for substitution.")
+        else:
+            output = w_dna[0:result[0]["start"]]+insert+w_dna[result[0]["end"]:]
+            output = "".join([n for n in output if n.isalpha()]).upper()
+            if len(result)>0:
+                if output == m_dna[0:30]:
+                    st.success("Correct!")
+                    for key in st.session_state.keys():
+                        del st.session_state[key]
+                    st.balloons()
+                    time.sleep(3)
+                    st.switch_page("other_pages//Practice.py")
+                else:
+                    st.error('Incorrect', icon="🚨")
+                    #st.write("You Inputed: "+ output)
+                    #st.write("The Answer: "+ m_dna[0:30])
 
 
 
