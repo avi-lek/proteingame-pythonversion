@@ -14,8 +14,9 @@ import pandas as pd
 # gets PDB content
 def get_pdb_content():
     if st.session_state["use_esm"]:
-       if bool(~os.path.isfile("pdb/sandbox.pdb")):
-            get_esm_pdb(st.session_state["esm_seq"], ("sandbox"))
+        get_esm_pdb(st.session_state["esm_seq"], ("sandbox"))
+       #if bool(~os.path.isfile("pdb/sandbox.pdb")):
+        #get_esm_pdb(st.session_state["esm_seq"], ("sandbox"))
        with open("pdb/sandbox.pdb") as ifile:
            system = "".join([x for x in ifile])
            st.caption("Source: " + system.split('\n')[1][6:])
