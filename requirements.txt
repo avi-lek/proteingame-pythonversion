@@ -8,5 +8,4 @@ py3Dmol
 stmol
 ipython_genutils
 text-highlighter
-streamlit-dimensions
 streamlit_extras
