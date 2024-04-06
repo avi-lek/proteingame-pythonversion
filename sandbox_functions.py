@@ -15,16 +15,16 @@ import random
 # gets PDB content
 def get_pdb_content():
     if st.session_state["use_esm"]:
-       if bool(~os.path.isfile("pdb/sandbox.pdb")):
+        if bool(~os.path.isfile("pdb\\sandbox.pdb")):
             get_esm_pdb(st.session_state["esm_seq"], ("sandbox"))
-       with open("pdb/sandbox.pdb") as ifile:
-           system = "".join([x for x in ifile])
-           st.caption("Source: " + system.split('\n')[1][6:])
-           return system
+        with open("pdb\\sandbox.pdb") as ifile:
+            system = "".join([x for x in ifile])
+            st.caption("Source: " + system.split('\n')[1][6:])
+            return system
     else:
-       pdb_url = f'https://files.rcsb.org/download/{st.session_state["code"][0:5].upper()}.pdb'
-       system = urllib.request.urlopen(pdb_url).read().decode("utf-8")
-       st.caption("Source: " + system.split('\n')[1][6:-1])
+        pdb_url = f'https://files.rcsb.org/download/{st.session_state["code"][0:5].upper()}.pdb'
+        system = urllib.request.urlopen(pdb_url).read().decode("utf-8")
+        st.caption("Source: " + system.split('\n')[1][6:-1])
     return system
 
 
