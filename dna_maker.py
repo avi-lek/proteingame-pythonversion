@@ -1,24 +1,3 @@
-import numpy as np
-import streamlit as st
-import requests
-import urllib
-import py3Dmol
-from stmol import showmol
-from utils import *
-import os
-import Bio
-from Bio.PDB.PDBIO import PDBIO
-from puzzles.puzzle_help import pdb_to_fasta
-from Bio.PDB import PDBIO
-from Bio.PDB.Atom import Atom
-
-from Bio.PDB import *
-from Bio.Seq import Seq
-
-from Bio.PDB import PDBIO, Structure, Model, Chain, Atom
-import numpy as np
-import numpy as np
-
 import math
 # Function to generate PDB file
 def generate_pdb(filename, sequence_length):
@@ -73,25 +52,3 @@ sequence_length = 60
 
 # Generate PDB file
 generate_pdb("pdb//dna//rna.pdb", sequence_length)
-'''with open("pdb//dna//dna.pdb") as ifile:
-    system = "".join([x for x in ifile])
-
-
-
-view = py3Dmol.view(width=600, height=800)
-view.addModelsAsFrames(system)
-color= ["red", "blue", "green", "yellow"]
-i=0
-
-for line in system.split('\n'):
-    split = line.split()
-
-    if len(split) == 0 or split[0] != "ATOM":
-        continue
-    view.setStyle({'model': -1, 'serial': i+1}, {"sphere": {'color': color[i%4]}})
-    i += 1
-
-view.zoomTo()
-
-showmol(view, height=600, width=800)
-st.write("working")'''

@@ -10,7 +10,6 @@ from Bio.PDB import *
 import py3Dmol
 from utils import *
 import pandas as pd
-import random
 
 # gets PDB content
 def get_pdb_content():
@@ -25,7 +24,7 @@ def get_pdb_content():
         pdb_url = f'https://files.rcsb.org/download/{st.session_state["code"][0:5].upper()}.pdb'
         system = urllib.request.urlopen(pdb_url).read().decode("utf-8")
         st.caption("Source: " + system.split('\n')[1][6:-1])
-    return system
+        return system
 
 
 
@@ -164,7 +163,6 @@ def vis_esm():
                 sup(wild_path[0], wild_path[i])
     quick_viz()
 
-#from stmol import showmol
 def quick_viz():
     wild_path = ["pdb\\sandbox0.pdb", "pdb\\sandbox1.pdb", "pdb\\sandbox2.pdb", "pdb\\sandbox3.pdb", "pdb\\sandbox4.pdb"]
     colors = ['#00FFFF', '#FF00FF', '#FFFF00', '#00FF00', '#FFC0CB', '#FFA500', '#0000FF', '#800080', '#FF0000', '#008080']

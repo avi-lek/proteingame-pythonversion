@@ -1,19 +1,6 @@
 import streamlit as st
-import py3Dmol
-import urllib
-import Bio.PDB.Polypeptide
-from Bio.PDB import Superimposer, PDBParser
-import numpy
-from Bio.SeqUtils import seq1
-from Bio.PDB.PDBIO import PDBIO
-import os
-import pandas as pd
-from puzzles.puzzle_help import amino_acids_to_rna
-import random
 from puzzles.puzzle_help import *
 from get_puzzle import *
-import pandas as pd
-from Bio.PDB import PDBParser, PDBIO
 from sandbox_functions import *
 import streamlit.components.v1 as components
 import ipywidgets as widgets
@@ -117,6 +104,15 @@ def get_esm_pdb(aa_seq, fname):
         'Content-Type': 'application/x-www-form-urlencoded',
     }
     response = requests.post('https://api.esmatlas.com/foldSequence/v1/pdb/', headers=headers, data=aa_seq, verify=False)
+    with open('pdb\\'+fname+'.pdb', 'wb') as f:
+        f.write(response.content)
+
+def get_esm_pdb2(aa_seq, fname):
+    headers = {
+        'Content-Type': 'application/x-www-form-urlencoded',
+    }
+    response = requests.post('https://api.esmatlas.com/foldSequence/v1/pdb/', headers=headers, data=aa_seq, verify=False)
+    st.write(type(response.content))
     with open('pdb\\'+fname+'.pdb', 'wb') as f:
         f.write(response.content)
 

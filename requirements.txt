@@ -5,7 +5,6 @@ pandas
 streamlit
 st_pages
 py3Dmol
-stmol
 ipython_genutils
 text-highlighter
 streamlit_extras

@@ -1,17 +1,10 @@
-from stmol import showmol
 import streamlit as st
 import py3Dmol
-import urllib
 import Bio.PDB.Polypeptide
-from Bio.PDB import Superimposer, PDBParser
-import numpy
-from Bio.SeqUtils import seq1
 from Bio.PDB.PDBIO import PDBIO
 from utils import*
 import os
 import pandas as pd
-from puzzles.puzzle_help import amino_acids_to_rna
-import random
 from puzzles.puzzle_help import *
 from get_puzzle import *
 import pandas as pd
@@ -87,7 +80,7 @@ def vis_overlay():
 
 
 
-    view = py3Dmol.view(width=800, height=400)
+    view = py3Dmol.view(height=400)
     with st.sidebar.expander("Visualization Settings"):
         wcolor = st.color_picker('Wildtype Protein Color', '#00f900')
         wopacity = st.slider("Wildtype Protein Opacity", min_value=0.0,max_value=1.0, value=1.0)
@@ -103,7 +96,7 @@ def vis_overlay():
     view.setStyle({'model':1}, {st.session_state["style"]: {'color': mcolor, 'opacity': mopacity}})
     add_hover_with_color(view)
     view.zoomTo()
-    showmol(view, width=800, height=400)
+    showmol(view,height=400)
 def viz_dna(choice):
     dna = rna_to_DNA(st.session_state[choice+"_change_rna"])
     
@@ -127,7 +120,7 @@ def viz_dna(choice):
     with open("pdb//dna//rna.pdb") as ifile:
         pre_sys = [x for x in ifile][0:len(rna_colors)]
         system2 = "".join(pre_sys)
-    view = py3Dmol.view(width=800, height=300)
+    view = py3Dmol.view(height=300)
     view.addModelsAsFrames(system1)
     view.addModelsAsFrames(system2)
     i=0 
@@ -150,7 +143,7 @@ def viz_dna(choice):
         i=i+1
     view.zoomTo()
 
-    showmol(view, width=800, height=300)
+    showmol(view, height=300)
 
 def transcript_dogma():
     if "info0" not in st.session_state:
@@ -462,11 +455,11 @@ def check_substitution():
 def q_viz(file, color):
     with open(file) as ifile:
         system = "".join([x for x in ifile])
-    view = py3Dmol.view(height=600, width=800)
+    view = py3Dmol.view(height=600)
     view.addModelsAsFrames(system)
     view.setStyle({'model': -1}, {"cartoon": {'color': color}})
     view.zoomTo()
-    showmol(view, height=600, width=800)
+    showmol(view, height=600)
 def rna_to_DNA(rna):
     opp_dna = []
     for i in list(rna):

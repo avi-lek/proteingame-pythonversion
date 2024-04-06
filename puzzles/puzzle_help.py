@@ -1,4 +1,3 @@
-from stmol import showmol
 import streamlit as st
 import py3Dmol
 import urllib

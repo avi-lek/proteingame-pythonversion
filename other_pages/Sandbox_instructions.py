@@ -1,5 +1,4 @@
 import streamlit as st
-from stmol import showmol
 from sandbox_functions import *
 from st_pages import Page, Section, show_pages, add_page_title, hide_pages
 add_page_title()

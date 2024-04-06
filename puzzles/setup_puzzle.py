@@ -1,5 +1,4 @@
 import streamlit as st
-from stmol import showmol
 import pandas as pd
 import os
 import random
