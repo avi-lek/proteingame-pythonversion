@@ -25,3 +25,15 @@ name = "Translation"
 [[pages]]
 path = "other_pages//MutationQuiz.py"
 name = "Identify Mutations"
+
+[[pages]]
+path = "other_pages//PythonVersion.py"
+name = "Python Version"
+
+[[pages]]
+path = "other_pages//CodeTranscription.py"
+name = "Python Transcription"
+
+[[pages]]
+path = "other_pages//CodeTranslation.py"
+name = "Python Translation"
