@@ -13,7 +13,9 @@ st.title("DNA to RNA")
 
 # DNA input & expected RNA user output
 dna = get_rand_dna()
-mrna = dna_to_rna(dna, "123456789")
+
+if 'mrna' not in st.session_state:
+    st.session_state['mrna'] = dna_to_rna(dna, "123456789")
 
 # for codon chart in pre_code later
 curly1 = "{"
@@ -28,7 +30,7 @@ dna_sequence = "{dna}"
 dna_length = len(dna_sequence)
 
 # your RNA output (this is empty for now... it'll be complete once you transcribe the DNA below!)
-rna_sequence = ""
+rna_sequence = "{st.session_state.mrna}"
 
 # transcribe the DNA into RNA by iterating through every nucleotide:
 for nucleotide in dna_sequence:
