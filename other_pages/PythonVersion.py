@@ -6,7 +6,6 @@ import contextlib
 import io
 import sys
 from Bio.Seq import Seq
-from execute import *
 from pyversion_funcs import *
 
 from st_pages import hide_pages
@@ -17,6 +16,8 @@ hide_pages(["Sandbox", "Mutations Practice", "Python Transcription", "Python Tra
 st.title("Python Version")
 intro_msg = """Welcome to the Python version! This aspect of our website will integrate Python programming with the Central Dogma of biology.
 Especially with transcription and translation, it's often boring and time consuming to do it all by hand. But by using Python, you can have a computer do it for you!
+
+In the first part of this exericse, you'll use Python to transcribe a DNA sequence into mRNA. In the second part, you'll translate your mRNA sequence into an amino acid sequence. 
 
 Whenever you are ready, click Start Exercise to begin!
 """

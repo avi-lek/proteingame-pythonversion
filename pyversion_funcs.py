@@ -3,7 +3,6 @@ from Bio.Seq import Seq
 import streamlit as st
 import pandas as pd
 from streamlit_ace import st_ace
-from execute import *
 
 
 # gets random DNA sequence

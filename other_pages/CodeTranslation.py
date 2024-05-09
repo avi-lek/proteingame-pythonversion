@@ -6,6 +6,7 @@ import pandas as pd
 from streamlit_ace import st_ace
 from execute import *
 from st_pages import hide_pages
+from code_editor import code_editor
 
 hide_pages(["Sandbox", "Mutations Practice", "Python Transcription", "Python Translation", "Transcription", "Identify Mutations", "Translation", "Sandbox Instructions"])
 
@@ -14,24 +15,28 @@ hide_pages(["Sandbox", "Mutations Practice", "Python Transcription", "Python Tra
 st.title("RNA to Amino Acids")
 
 # RNA input and expected AA user output
-mrna = st.session_state.mrna
-aa = rna_to_aa_super_secret(mrna, "123456789")
-num_codons = int(len(mrna) / 3)
+
+if 'aa' not in st.session_state:
+    st.session_state['aa'] = rna_to_aa_super_secret(st.session_state.mrna, "123456789")
+num_codons = int(len(st.session_state.mrna) / 3)
 
 # for codon chart in pre_code later
-curly1 = "{"
-curly2 = "}"
+if 'curly1' not in st.session_state:
+    st.session_state['curly1'] = "{"
+
+if 'curly2' not in st.session_state:
+    st.session_state['curly2'] = "}"
 
 
 # pre-existing code for user 
 translate_pre_code = f"""# your mRNA sequence:
-mrna = "{mrna}"
+mrna = "{st.session_state.mrna}"
 
 # number of codons (groups of 3) in the mRNA sequence:
-num_codons = {num_codons}
+num_codons = int(len(mrna) / 3)
 
 # here's a Python dictionary that contains all codons and their corresponding amino acids:
-codon_table = {curly1}
+codon_table = {st.session_state.curly1}
     'UUU': 'F', 'UUC': 'F',
     'UUA': 'L', 'UUG': 'L', 'CUU': 'L', 'CUC': 'L', 'CUA': 'L', 'CUG': 'L',
     'AUU': 'I', 'AUC': 'I', 'AUA': 'I',
@@ -53,10 +58,10 @@ codon_table = {curly1}
     'UGG': 'W',
     'CGU': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R', 'AGA': 'R', 'AGG': 'R',
     'GGU': 'G', 'GGC': 'G', 'GGA': 'G', 'GGG': 'G',
-{curly2}
+{st.session_state.curly2}
 
 # amino acid sequence: (this should be empty at the start. it'll be complete once you translate each codon below!)
-aa = ""
+aa = "{st.session_state.aa}"
 
 # iterate through every codon in the mRNA sequence:
 for i in range(num_codons):
@@ -79,9 +84,7 @@ print(aa)
 """
 
 
-translate_instructs = f"""In actuality, mutations in proteins can be much larger than just a couple nucleotides, requiring scientists to study significantly longer sequences of DNA or mRNA. 
-Here, we are looking at an mRNA sequence that is {num_codons * 3} nucleotides long. That means that its corresponding amino acid sequence will be {num_codons} amino acids long!
-Using a Python script, iterate through the mRNA sequence and translate it into its corresponding polypeptide.
+translate_instructs = f"""Now that we've transcribed 
 
 Once you're confident in your code, first click APPLY to save your work, and then hit Run Code!
 """
@@ -89,12 +92,34 @@ Once you're confident in your code, first click APPLY to save your work, and the
 
 st.write(translate_instructs)
 
-#user code
-code = st_ace(value = translate_pre_code, language = 'python', height = 800)
 
-#if user tries to run their code:
-if st.button("Run Code"):
-    output, matches = execute_code(code, mrna, "translation")
+
+# code editor config variables
+height = [19, 22]
+language="python"
+theme="default"
+shortcuts="vscode"
+focus=False
+wrap=True
+editor_btns = [{
+    "name": "Run",
+    "feather": "Play",
+    "primary": True,
+    "hasText": True,
+    "showWithIcon": True,
+    "commands": ["submit"],
+    "style": {"bottom": "0.44rem", "right": "0.4rem"}
+  }]
+
+
+code = code_editor(translate_pre_code,  height = height, lang=language, theme=theme, shortcuts=shortcuts, focus=focus, buttons=editor_btns, options={"wrap": wrap})
+
+
+# show response dict
+if len(code['id']) != 0 and (code['type'] == "selection" or code['type'] == "submit" ):
+    # Capture the text part
+    user_text = code['text']
+    output, matches = execute_code(user_text, st.session_state.mrna, "translation")
 
     # if output is error msg
     if output[0: 21] == 'Error executing code:':
@@ -105,7 +130,9 @@ if st.button("Run Code"):
         st.write("The amino acid sequence you got was " + output + ".") 
 
     if matches:
-        st.success("Congratulations, your code works!")
+        st.success("Congratulations, you're all done!")
+        if st.button("Return Home"):
+            st.switch_page("Home.py")
         
     else:
         st.warning("Not quite. Try again")

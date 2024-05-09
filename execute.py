@@ -63,5 +63,3 @@ def execute_code(code, sequence, type):
         
     except Exception as e:
         return f"Error executing code: {e}", False
-
-
