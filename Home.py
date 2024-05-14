@@ -6,7 +6,7 @@ import toml
 #Configure Page
 st.set_page_config(page_title="My Protein Is Broken!", page_icon=":dna:", layout="wide")
 
-hide_pages(["Python Transcription", "Python Translation"])
+hide_pages(["Python Transcription", "Python Translation", "Intro to Python"])
 st.header("Home")
 st.markdown("""
         <style>

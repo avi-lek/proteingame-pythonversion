@@ -6,10 +6,13 @@ from pyversion_funcs import *
 from st_pages import hide_pages
 from code_editor import code_editor
 from execute import *
+from py_version_utils import *
 
 hide_pages(["Python Transcription", "Python Translation"])
 
 st.title("DNA to RNA")
+
+init_sidebar()
 
 # DNA input & expected RNA user output
 if 'dna' not in st.session_state:

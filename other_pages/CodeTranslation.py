@@ -7,12 +7,15 @@ from streamlit_ace import st_ace
 from execute import *
 from st_pages import hide_pages
 from code_editor import code_editor
+from py_version_utils import *
 
 hide_pages(["Python Transcription", "Python Translation"])
 
 
 
 st.title("RNA to Amino Acids")
+
+init_sidebar()
 
 # RNA input and expected AA user output
 

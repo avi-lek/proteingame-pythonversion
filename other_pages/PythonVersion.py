@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 from streamlit_ace import st_ace
-#from streamlit-extras import st.switch_page
 import contextlib
 import io
 import sys
@@ -10,8 +9,7 @@ from pyversion_funcs import *
 from py_version_utils import *
 from st_pages import hide_pages
 
-hide_pages(["Python Transcription", "Python Translation"])
-init_sidebar()
+hide_pages(["Python Transcription", "Python Translation", "Intro to Python"])
 
 # welcome user to page
 st.title("Python Version")
