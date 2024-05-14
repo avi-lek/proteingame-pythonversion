@@ -7,10 +7,11 @@ import io
 import sys
 from Bio.Seq import Seq
 from pyversion_funcs import *
-
+from py_version_utils import *
 from st_pages import hide_pages
 
 hide_pages(["Python Transcription", "Python Translation"])
+init_sidebar()
 
 # welcome user to page
 st.title("Python Version")
