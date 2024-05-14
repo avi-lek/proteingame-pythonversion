@@ -1,4 +1,3 @@
-import random
 from Bio.Seq import Seq
 import streamlit as st
 import pandas as pd
@@ -27,29 +26,30 @@ curly2 = "}"
 transcribe_pre_code = f"""# your DNA sequence:
 dna_sequence = "{st.session_state.dna}"
 
-# DNA sequence length:
-dna_length = len(dna_sequence)
-
 # your RNA output (this is empty for now... it'll be complete once you transcribe the DNA below!)
 rna_sequence = "{st.session_state.mrna}"
 
-# transcribe the DNA into RNA by iterating through every nucleotide:
-for i in range(dna_length)
-    # how do you transcribe each individual nucleotide?
+# transcribe the DNA into RNA by going through through every nucleotide:
+for nucleotide in dna_sequence:
+    # if the DNA base is A, then the RNA base is U
+    if nucleotide == "A":
+        rna_sequence += "U"
+
+    # what about the other bases? 
 
 
 # at the end, print your RNA sequence!
-print(rna_sequence)
-
-"""
+print(rna_sequence)"""
 
 
 # instructions
-transcribe_instructs = f"""In actuality, mutations in proteins can be much larger than just a couple nucleotides, requiring scientists to study significantly longer sequences of DNA. 
-Here, we are looking at an DNA sequence that is {len(st.session_state.dna)} nucleotides long! When transcribing larger sequences like these, using Python is a lot more efficient than doing it by hand.  
-Writing your own Python script, iterate through the DNA sequence and transcribe it into an mRNA sequence.
+transcribe_instructs = f"""Think back to when you first looked at central dogma in biology and had to transcribe a small portion of a DNA sequence by hand. 
+Here, we are looking at an DNA sequence that is {len(st.session_state.dna)} nucleotides long.  When transcribing larger sequences like these, using Python is a lot more efficient.   
 
-Once you're confident in your code, first click Run in the bottom right corner of the text editor window. 
+Instructions below the text editing box will guide you through everything!
+
+
+Once you're confident in your code, hover over the bottom right corner of the text editor window and click Run.  
 """
 st.write(transcribe_instructs)
 
@@ -72,7 +72,25 @@ editor_btns = [{
   }]
 
 
-code = code_editor(transcribe_pre_code,  height = height, lang=language, theme=theme, shortcuts=shortcuts, focus=focus, buttons=editor_btns, options={"wrap": wrap})
+code = code_editor(transcribe_pre_code,  height = height, lang=language, theme=theme, shortcuts=shortcuts, focus=focus, buttons=editor_btns, options={"wrap": wrap, "showLineNumbers": True})
+
+transcription_guide = f"""You might not have any Python experience, but that’s totally ok! Here’s a runthrough of what’s going on here and what you need to do. 
+
+There are 3 parts to this Python script:
+
+1. In line 2, we’ve stored the DNA sequence you’re transcribing today into a ***Python string***. Think of it as one long word with each letter representing one nucleotide in the sequence. 
+
+2. Right under that in line 5, we’ve stored the RNA sequence in another string. You’ll notice that it’s empty right now, but that’s because we’ll add each nucleotide one by one when we transcribe. 
+
+3. Finally, let’s do the actual transcription. In line 8, we’ve initiated a ***for loop***. A for loop is essentially a function in Python that in this case, individually goes through all {len(st.session_state.dna)} nucleotides in the DNA sequence. 
+
+Inside the ***for loop***, we can check what each base in the DNA is and attach the corresponding base to the RNA sequence. That’s pretty easy with ***if statements***. If statements check to see if something is true, and in this scenario, we want to check what each nucleotide is.  
+
+On line 9, the ***if statement*** we’ve already written is checking if the base is A. If it is, it’ll add the corresponding base, U, to the RNA sequence. But A isn’t the only possible nucleotide in the DNA. Your job will be to finish the ***for loop*** by writing ***if statements*** for the other 3 bases! 
+
+"""
+
+st.markdown(transcription_guide)
 
 # show response dict
 if len(code['id']) != 0 and (code['type'] == "selection" or code['type'] == "submit" ):

@@ -13,3 +13,7 @@ name = "Python Transcription"
 [[pages]]
 path = "other_pages//CodeTranslation.py"
 name = "Python Translation"
+
+[[pages]]
+path = "other_pages//PythonIntro.py"
+name = "Intro to Python"
