@@ -30,10 +30,7 @@ if 'curly2' not in st.session_state:
 
 # pre-existing code for user 
 translate_pre_code = f"""# your mRNA sequence:
-mrna = "{st.session_state.mrna}"
-
-# number of codons (groups of 3) in the mRNA sequence:
-num_codons = int(len(mrna) / 3)
+mrna_sequence = "{st.session_state.mrna}"
 
 # here's a Python dictionary that contains all codons and their corresponding amino acids:
 codon_table = {st.session_state.curly1}
@@ -63,6 +60,9 @@ codon_table = {st.session_state.curly1}
 # amino acid sequence: (this should be empty at the start. it'll be complete once you translate each codon below!)
 aa = "{st.session_state.aa}"
 
+# number of codons (groups of 3) in the mRNA sequence:
+num_codons = int(len(mrna_sequence) / 3)
+
 # iterate through every codon in the mRNA sequence:
 for i in range(num_codons):
     # translate each codon into its corresponding AA:
@@ -84,7 +84,7 @@ print(aa)
 """
 
 
-translate_instructs = f"""Now that we've transcribed 
+translate_instructs = f"""Now that we have the mRNA, let's translate it into an amino acid sequence. 
 
 Once you're confident in your code, first click APPLY to save your work, and then hit Run Code!
 """
@@ -112,7 +112,7 @@ editor_btns = [{
   }]
 
 
-code = code_editor(translate_pre_code,  height = height, lang=language, theme=theme, shortcuts=shortcuts, focus=focus, buttons=editor_btns, options={"wrap": wrap})
+code = code_editor(translate_pre_code,  height = height, lang=language, theme=theme, shortcuts=shortcuts, focus=focus, buttons=editor_btns, options={"wrap": wrap, "showLineNumbers": True})
 
 
 # show response dict
