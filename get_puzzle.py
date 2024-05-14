@@ -16,5 +16,3 @@ def get_puzzle():
         "m_len" : random_row["m_len"].values[0],
         "m_type" : random_row["m_type"].values[0],
     }
-    
-#w

@@ -8,7 +8,7 @@ from st_pages import hide_pages
 from code_editor import code_editor
 from execute import *
 
-hide_pages(["Sandbox", "Mutations Practice", "Python Transcription", "Python Translation", "Transcription", "Identify Mutations", "Translation", "Sandbox Instructions"])
+hide_pages(["Python Transcription", "Python Translation"])
 
 st.title("DNA to RNA")
 

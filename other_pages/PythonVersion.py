@@ -10,7 +10,7 @@ from pyversion_funcs import *
 
 from st_pages import hide_pages
 
-hide_pages(["Sandbox", "Mutations Practice", "Python Transcription", "Python Translation", "Transcription", "Identify Mutations", "Translation", "Sandbox Instructions"])
+hide_pages(["Python Transcription", "Python Translation"])
 
 # welcome user to page
 st.title("Python Version")
