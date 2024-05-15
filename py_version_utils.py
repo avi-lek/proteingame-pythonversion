@@ -221,3 +221,41 @@ def quick_execute(new_code):
     else:
         st.code(for_loop_result)
 
+def init_indent():
+    st.write('''Keep in mind that for both **for loops** and **if statements** that you're using the right syntax! That means indenting the lines inside the for loop. Here are the two most common mistakes:''')
+    indent_ex = '''
+    # missing the indent:
+    for nucleotide in dna_sequence:
+    print(nucleotide)
+
+    # missing the colon:
+    for nucleotide in dna_sequence
+        print(nucleotide)
+    '''
+    st.code(indent_ex, language = "python", line_numbers = True)
+    st.write('''If you're using the correct syntax, everything should run smoothly. Here's an example of a correctly written **for loop**:''')
+    indent_correct_ex = '''
+    # what you SHOULD do:
+    for nucleotide in dna_sequence:
+        print(nucleotide)
+    '''
+    st.code(indent_correct_ex, language = "python", line_numbers = True)
+
+    st.write('''The same goes for **if statements**! Make sure your code doesn't look like this:''')
+    index_if_ex = '''
+    # missing the indent:
+    if nucleotide == "A":
+    rna_sequence += "U"
+    
+    # missing the colon:
+    if nucleotide == "A"
+        rna_sequence += "U"
+
+    # only using one equals '=' sign:
+    if nucleotide = "A":
+        rna_sequence += "U"
+    '''
+    st.code(index_if_ex, language = "python", line_numbers = True)
+    st.write('''Make sure that you're adding colons and indenting just like with **for loops** while also using two equals signs '==' to check what the nucleotide is!
+             *When attaching the nucleotide to the end of the RNA sequence, also make sure to use the "+=" operator!*
+             ''')
