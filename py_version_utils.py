@@ -20,9 +20,7 @@ def init_intro():
     st.write('''No experience with Python? No worries! This exercise will teach you how to transcribe long sequences of DNA using Python with step-by-step instructions that'll introduce you to different Python concepts. In the sidebar, there'll also be more in depth info on Python under "Python Reference" if you're stuck!
     ''')
 
-# start of Python tutorial - prob good to have button to show this part 
-def init_for_loops():
-    # PART 1: FOR LOOPS...
+def init_string():
     st.write('''
     To start, in order to transcribe a DNA sequence, we need to store it somewhere first. 
     We can store DNA sequences in a ***Python string***, a data type that can store words and sentences. Think of the string dna_sequence below as one long word with each base being a letter. 
@@ -36,9 +34,18 @@ def init_for_loops():
     '''
     st.code(string_code, language = "python", line_numbers = True)
 
+# start of Python tutorial - prob good to have button to show this part 
+def init_for_loops():
+    # PART 1: FOR LOOPS...
     # introduce the for loop
     st.write('''In order to transcribe this sequence though, we need to be able read through every “letter,” or nucleotide, of the sequence. 
-    An efficient way to go through the sequence is with ***for loops***. Here's an example!''')
+    An efficient way to go through the sequence is with ***for loops***''')
+
+    # more for loop explanation
+    for_loop_exp = '''The ***for loop*** above reads through every nucleotide in the DNA sequence and print every nucleotide individually. 
+    Hover over the bottom right of the code box and click Run to see!
+    '''
+    st.write(for_loop_exp)
 
     # show for loop ex
     for_loop_code = '''# DNA sequence stored in a Python string:
@@ -48,47 +55,7 @@ dna_sequence = "ATGCTAGTA"
 for nucleotide in dna_sequence:
     print(nucleotide)
     '''
-    
-    # config it
-    height = [6, 22]
-    language="python"
-    theme="default"
-    shortcuts="vscode"
-    focus=False
-    wrap=True
-    editor_btns = [{
-        "name": "Run",
-        "feather": "Play",
-        "primary": True,
-        "hasText": True,
-        "showWithIcon": True,
-        "commands": ["submit"],
-        "style": {"bottom": "0.44rem", "right": "0.4rem"}
-    }]
-
-    code = code_editor(for_loop_code,  height = height, lang=language, theme=theme, shortcuts=shortcuts, focus=focus, buttons=editor_btns, options={"wrap": wrap, "showLineNumbers": True})
-
-    # more for loop explanation
-    for_loop_exp = '''The ***for loop*** above reads through every nucleotide in the DNA sequence and print every nucleotide individually. 
-    Hover over the  bottom right of the code window and click Run to see!
-    '''
-    st.write(for_loop_exp)
-
-    # show result of for loop print
-    for_loop_result = '''
-    A
-    T
-    G
-    C
-    T
-    A
-    G
-    T
-    A
-    '''
-
-    if len(code['id']) != 0 and (code['type'] == "selection" or code['type'] == "submit" ):
-        st.code(for_loop_result, language = "python", line_numbers = False)
+    quick_execute(for_loop_code)
     
 
 def init_if():
@@ -220,10 +187,37 @@ print(rna_sequence)
 
         # if their code compiles
         else:
-            st.write("The mRNA sequence you got was: " + output + ".") 
+            st.code(output) 
 
         if matches:
             st.success("Congratulations, your code works! You've now finished the exercise!")
             
         else:
             st.warning("Not quite. Try again.")
+
+def quick_execute(new_code):
+    # config it
+    height = [6, 22]
+    language="python"
+    theme="default"
+    shortcuts="vscode"
+    focus=False
+    wrap=True
+    editor_btns = [{
+        "name": "Run",
+        "feather": "Play",
+        "primary": True,
+        "hasText": True,
+        "showWithIcon": True,
+        "commands": ["submit"],
+        "style": {"bottom": "0.44rem", "right": "0.4rem"}
+    }]
+
+    code = code_editor(new_code,  height = height, lang=language, theme=theme, shortcuts=shortcuts, focus=focus, buttons=editor_btns, options={"wrap": wrap, "showLineNumbers": True})
+    for_loop_result, err = execute_code_output(code["text"])
+    # show result of for loop print
+    if err==False:
+        st.error(for_loop_result)
+    else:
+        st.code(for_loop_result)
+

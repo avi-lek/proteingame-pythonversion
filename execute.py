@@ -50,7 +50,7 @@ def execute_code(code, sequence, type):
             elif stderr_output:
                 return stderr_output, False
             else:
-                return ""
+                return "", ""
         
         # if it's transcription
         else:
@@ -59,7 +59,33 @@ def execute_code(code, sequence, type):
             elif stderr_output:
                 return stderr_output, False
             else:
-                return ""
+                return "", ""
         
+    except Exception as e:
+        return f"Error executing code: {e}", False
+
+def execute_code_output(code):
+    try:
+        with capture_stdout_stderr() as (stdout_capture, stderr_capture):
+            # If the code contains multiple lines, execute it as multiline code
+            if '\n' in code:
+                # Execute the code in a custom namespace
+                exec_namespace = {}
+                exec(code, exec_namespace)
+
+                # Move defined functions to the global namespace
+                for name, obj in exec_namespace.items():
+                    if callable(obj) and not name.startswith("__"):
+                        globals()[name] = obj
+                
+            else:
+                # Execute single-line code
+                exec(code, globals())
+
+
+        # Get captured output from stdout and stderr
+        stdout_output = stdout_capture.getvalue().strip()
+        stderr_output = stderr_capture.getvalue().strip()
+        return stdout_output,stderr_output
     except Exception as e:
         return f"Error executing code: {e}", False

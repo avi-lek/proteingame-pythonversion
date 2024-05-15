@@ -18,23 +18,30 @@ st.markdown("""
         </style>
         """, unsafe_allow_html=True)
 
+if "py_step" not in st.session_state:
+    st.session_state.py_step = 0
 st.header("Python Version")
 init_sidebar()
 
+
 init_intro()
-if "show" not in st.session_state:
-    st.session_state.show = False
-
-if st.button("show"):
-    st.session_state.show = True
-if st.button("hide"):
-    st.session_state.show = False
-
-
-if st.session_state.show:
+if st.session_state.py_step > 0:
+    st.divider()
+    init_string()
+if st.session_state.py_step > 1:
+    st.divider()
     init_for_loops()
+if st.session_state.py_step > 2:
+    st.divider()
+    init_if()
+if st.session_state.py_step > 3:
+    st.divider()
+    transcription_exercise()
 
-
+if st.session_state.py_step < 4:
+    if st.button("Next Step"):
+        st.session_state.py_step += 1
+        st.rerun()
 
 
 

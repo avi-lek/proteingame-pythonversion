@@ -130,7 +130,7 @@ if len(code['id']) != 0 and (code['type'] == "selection" or code['type'] == "sub
 
     # if they didn't fuck up
     else:
-        st.write("The amino acid sequence you got was " + output + ".") 
+        st.code("The amino acid sequence you got was " + output + ".") 
 
     if matches:
         st.success("Congratulations, you're all done!")
