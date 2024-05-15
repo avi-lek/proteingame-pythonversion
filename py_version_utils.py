@@ -59,11 +59,11 @@ for nucleotide in dna_sequence:
     
 
 def init_if():
-    if_intro = '''However, with the **for loops**, we don't want to just print out each nucleotide. We want to transcribe each one into the corresponding mRNA base. 
-    That's pretty easy with **if statements** inside the for loop. With **if statements**, we can check to see which base each nucleotide is and add its corresponding base to the mRNA sequence, as follows:
+    if_intro = '''However, with the **for loops**, we might also want to make decisions inside of the for loop. 
+    For example, if you wanted to output an RNA sequence given the coding strand of DNA, you would need to use ***if statements*** inside a for loop to replace only Thymine with Uracil.
     '''
     st.write(if_intro)
-    if_statement_ex = '''# your DNA sequence: 
+    if_statement_ex = ''' 
 dna_sequence = "ATGCTAGTA"
 
 # your RNA sequence: (this is empty for now - it'll fill up as you iterate through the DNA and add bases one by one!)
@@ -71,59 +71,16 @@ rna_sequence = ""
 
 # for each nucleotide in the DNA:
 for nucleotide in dna_sequence:
-    # if the nucleotide is "A":
-    if nucleotide == "A":
-        # add "U" to the RNA sequence
+    # if the nucleotide is Thymine", add "U" to the RNA sequence 
+    if nucleotide == "T":
         rna_sequence += "U"
-
-    # otherwise, if the nucleotide is "T":
-    elif nucleotide == "T":
-        # add "A" to the RNA sequence
-        rna_sequence += "A"
-
-    # otherwise, if the nucleotide is "G":
-    elif nucleotide += "G":
-        # add "C" to the RNA sequence
-        rna_sequence += "C"
-
-    # otherwise, the nucleotide has to be "C":
+    # otherwise, add the DNA base to the RNA sequence
     else: 
-        # add "G" to the RNA sequence
-        rna_sequence += "G"
+        rna_sequence += nucleotide
 
-# print your RNA sequence!
-print(rna_sequence)
-    '''
+print(rna_sequence)'''
 
-    # config it
-    height = [6, 32]
-    language="python"
-    theme="default"
-    shortcuts="vscode"
-    focus=False
-    wrap=True
-    editor_btns = [{
-        "name": "Run",
-        "feather": "Play",
-        "primary": True,
-        "hasText": True,
-        "showWithIcon": True,
-        "commands": ["submit"],
-        "style": {"bottom": "0.44rem", "right": "0.4rem"}
-    }]
-
-    code = code_editor(if_statement_ex,  height = height, lang=language, theme=theme, shortcuts=shortcuts, focus=focus, buttons=editor_btns, options={"wrap": wrap, "showLineNumbers": True})
-
-    if_explanation = '''Here, in the **for loop**, we're checking what the nucleotide is, A, T, G, or C (*If you're confused about if statements, feel free to checkout the sidebar for a more thorough explanation!). 
-    After, we add the corresponding, "opposite" base to the RNA sequence with the operator +=, which adds the nucleotide to the end of the growing RNA sequence.
-    This way, as the for loop *iterates* through every nucleotide in the DNA sequence, the corresponding bases are added to the RNA sequence one by one! '''
-    st.write(if_explanation)
-    st.write('''After the for loop, we simply print the resulting RNA sequence using the **print()** function. To see this code work, hover over the bottom right corner of the text editor window and click Run! This will print the RNA sequence!''')
-
-    if_result = '''UACGAUCAU
-    '''
-    if len(code['id']) != 0 and (code['type'] == "selection" or code['type'] == "submit" ):
-        st.code(if_result, language = "python", line_numbers = False)
+    quick_execute(if_statement_ex)
 
 def transcription_exercise():
     # DNA input & expected RNA user output
