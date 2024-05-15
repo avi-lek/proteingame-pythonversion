@@ -3,13 +3,5 @@ path = "Home.py"
 name = "Home"
 
 [[pages]]
-path = "other_pages//CodeTranscription.py"
-name = "Python Transcription"
-
-[[pages]]
-path = "other_pages//CodeTranslation.py"
-name = "Python Translation"
-
-[[pages]]
 path = "other_pages//PythonVersion.py"
 name = "Python Version"

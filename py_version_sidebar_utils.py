@@ -1,13 +1,13 @@
 import streamlit as st
 
 def init_sidebar():
-    progress, py_ref, codon_chart = st.sidebar.tabs(["Progress", "Python Reference", "Codon Wheel"])
-    with progress:
-        if "progress_bar" not in st.session_state or "percent_complete" not in st.session_state or "checkpoints" not in st.session_state:
-            st.session_state.percent_complete = 0
-            st.session_state.checkpoints = ["item1", "item2", "item3", "item4", "Complete"]
-            st.session_state.progress_bar = st.progress(0, text="Introduction")
-    
+    #progress, py_ref, codon_chart = st.sidebar.tabs(["Progress", "Python Reference", "Codon Wheel"])
+    #with progress:
+        #if "progress_bar" not in st.session_state or "percent_complete" not in st.session_state or "checkpoints" not in st.session_state:
+            #st.session_state.percent_complete = 0
+            #st.session_state.checkpoints = ["item1", "item2", "item3", "item4", "Complete"]
+            #st.session_state.progress_bar = st.progress(0, text="Introduction")
+    py_ref, codon_chart = st.sidebar.tabs(["Python Reference", "Codon Wheel"])
     with py_ref:
         with st.expander("Strings"):
             st.write('''
