@@ -7,7 +7,7 @@ from streamlit_ace import st_ace
 from execute import *
 from st_pages import hide_pages
 from code_editor import code_editor
-from py_version_utils import *
+from py_version_sidebar_utils import *
 
 hide_pages(["Python Transcription", "Python Translation"])
 
