@@ -19,6 +19,7 @@ st.markdown("""
         """, unsafe_allow_html=True)
 
 st.header("Python Version")
+init_sidebar()
 
 init_intro()
 if "show" not in st.session_state:

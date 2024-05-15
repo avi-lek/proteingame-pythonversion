@@ -11,62 +11,86 @@ def init_sidebar():
     with py_ref:
         with st.expander("Strings"):
             st.write('''
-                In Python, a string is a datatype that represents a sequence of characters. For example, you might use strings to store names, messages, and other text. You can create a new string by setting it equal to another string, or setting it equal to text enclosed by either single or double quotes. 
+                In Python, a string is a datatype that represents a sequence of characters. For example, you might use strings to store names, messages, and other text. You can *initialize*, or create, a new string by assigning the name of the string to some text in quotations, with the equals sign. 
             ''')
             string_code_example = '''
-            #String Initialization Example:
-            single_quote_string = 'This is a valid string'
-            double_quote_string = "This is also a valid string"
+            # String Initialization Example:
+            school_name = "Bellarmine College Preparatory"
             '''
             st.code(string_code_example, language='python')
 
             st.write('''You can also combine strings by simply using the + operator. ''')
             string_code_example = '''
-            #Combining Strings Example:
-            string1 = "cat"
-            string2 = "dog"
-            string3 = string1+string2
+            # Combining Strings Example:
+            street_number = "960 "
+            street_name = "W Hedding St"
 
-            #string3 now contains "catdog"
+            address = street_number + street_name
+            # address now contains "960 W Hedding St"
             '''
             st.code(string_code_example, language='python')
-        with st.expander("For Loops"):
-            st.write('''In Python, a for loop is used to iterate over a sequence (like a list, tuple, dictionary, set, or string). When using a for loop to go through a string, you can access each character in the string one by one.''')
+
+            st.write('''Finally, you can also combine strings with the += operator, as shown below:''')
+
             string_code_example = '''
-            #This code prints out each character in “Hello, World!” individually. 
-            my_string = "Hello, World!"
-            for char in my_string:
-                print(char)
+            # Combing Strings Example #2:
+            address = "960 "
+            address += "W Hedding St"
+
+            # address now contains "960 W Hedding St"
+            '''
+            st.code(string_code_example, language='python')
+
+            st.write('''Effectively, you get the same result as the earlier example, just without having to initialize a second string for "W Hedding St". When using +=, "W Hedding St" is added to the end of address.''')
+
+        with st.expander("For Loops"):
+            st.write('''In Python, a **for loop** is used to *iterate* over, or go through, a sequence (like strings, but so lists, dictionaries, and other datatypes). When using a **for loop** to go through a string, you can access each character in the string one by one.''')
+            string_code_example = '''
+            # This code prints out each character in school_name individually:
+            school_name = "Bellarmine"
+            for letter in school_name:
+                print(letter)
 
             # Output:
-            # H
-            # e
-            # l
-            # l
-            # o
-            # ,
-            # 
-            # W
-            # o
-            # r
-            # l
-            # d
-            # !
+            # B
+            # E
+            # L
+            # L
+            # A
+            # R
+            # M
+            # I
+            # N
+            # E
             '''
             st.code(string_code_example, language='python')
-        with st.expander("If Statements"):
-            st.write('''In Python, if statements can be used to compare strings. You can compare two strings using the == (equality) and != (inequality) operators.''')
-            string_code_example = '''
-            #In this example, the output will be "The strings are not equal." because "hello" is not equal to "world".
-            string1 = "hello"
-            string2 = "world"
+            st.write('''Essentially, for every letter in the string, school_name, the for loop is going to print that letter. *For the purposes of transcription, you can use for loops to iterate through not just words, but DNA sequences too! They're basically super long words.*''')
 
-            if string1 == string2:
-                print("The strings are equal.")
-            else:
-                print("The strings are not equal.")
+        with st.expander("If Statements"):
+            st.write('''In Python, **if statements** can be used to check if something is true.''')
+            string_code_example = '''
+            # If Statement Example #1:
+            school_name = "Bellarmine"
+
+            if school_name == "Bellarmine":
+                print("Go Bells!")
             '''
             st.code(string_code_example, language='python')
+            st.write('''Here, we're checking school_name to verify that it's "Bellarmine." If so, we say "Go Bells!" *Keep in mind that we use two equal signs == in the if statement to verify a comparison!*''')
+            st.write('''However, if statements can also account for multiple "ifs": ''')
+            string_code_example = '''
+            # If Statement Example #2:
+            school_name = "Bellarmine"
+
+            if school_name == "Bellarmine":
+                print("Go Bells!")
+            elif school_name == "Archbishop Mitty":
+                print("Go Monarchs!")
+            else:
+                print("What's your school mascot?")
+            '''
+            st.code(string_code_example, language='python')
+            st.write('''Here, we're running multiple if statements. First, we check if the school is Bellarmine. If so, we print Go Bells! If not, we run the second if statement using "elif" (short for "else if") and check if the school is Mitty. If so, we print Go Monarchs! If both those conditions are false and the school is neither Bell or Mitty, then we'll simply ask what the school mascot is using "else."''')
     with codon_chart:
         st.image('screenshots//codon_wheel.png')
 
