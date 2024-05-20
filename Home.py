@@ -1,8 +1,7 @@
 import streamlit as st
 from st_pages import show_pages_from_config
-from streamlit_extras.let_it_rain import rain 
-from pyversion_funcs import *
-from dna_viz import *
+from pyversion_funcs import get_rand_dna_with_len_two_strands, get_rand_dna_with_len
+from dna_viz import viz_double_strand, viz_single_strand
 #Configure Page
 st.set_page_config(page_title="Python Transcription Task", page_icon=":dna:", layout="wide")
 
