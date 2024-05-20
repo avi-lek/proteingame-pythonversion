@@ -75,6 +75,7 @@ def ChangeTheme():
 
 btn_face = ms.themes["light"]["button_face"] if ms.themes["current_theme"] == "light" else ms.themes["dark"]["button_face"]
 
+st.sidebar.info("Changing to Light/Dark Mode may not work initially. If so, reload page.")
 st.sidebar.toggle("Light/Dark Mode", on_change=ChangeTheme)
 
 if ms.themes["refreshed"] == False:

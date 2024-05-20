@@ -60,13 +60,13 @@ def generate_pdb(sequence_length):
         pdb_file.write("TER\n")
         pdb_file.write("END\n")
 
-def viz_single_strand(seq):
+def viz_single_strand(seq, height=200, width=700):
     color_dict = {"A":"Red", "U":"Blue", "G":'Yellow', "C":"Green", "T":"Purple", "a":"Red", "u":"Blue", "g":'Yellow', "c":"Green", "t":"Purple"}
     generate_pdb(len(seq))
 
     with open("pdb/strand1.pdb") as ifile:
         system1 = "".join([x for x in ifile])
-    view = py3Dmol.view(height=200, width=700)
+    view = py3Dmol.view(height=height, width=width)
     theme_dict = {"light":"dark", "dark":"light"}
     theme = theme_dict[st.session_state.themes["current_theme"]]
     view.setBackgroundColor(st.session_state.themes[theme]["theme.secondaryBackgroundColor"])
@@ -79,9 +79,9 @@ def viz_single_strand(seq):
         view.setStyle({'model': 0, 'serial': i+1}, {"sphere": {'color': color_dict.get(seq[i], "black"), 'scale':2.5}})
         i += 1
     view.zoomTo()
-    stmol.showmol(view, height=200, width=700)
+    stmol.showmol(view, height=height, width=width)
 
-def viz_double_strand(seq1, seq2):
+def viz_double_strand(seq1, seq2, height=200, width=700):
     color_dict = {"A":"Red", "U":"Blue", "G":'Yellow', "C":"Green", "T":"Purple", "a":"Red", "u":"Blue", "g":'Yellow', "c":"Green", "t":"Purple"}
     generate_pdb(len(seq1))
 
@@ -91,7 +91,7 @@ def viz_double_strand(seq1, seq2):
     with open("pdb\strand2.pdb") as ifile2:
         system2 = "".join([x for x in ifile2])
 
-    view = py3Dmol.view(height=200, width=700)
+    view = py3Dmol.view(height=height, width=width)
     theme_dict = {"light":"dark", "dark":"light"}
     theme = theme_dict[st.session_state.themes["current_theme"]]
     view.setBackgroundColor(st.session_state.themes[theme]["theme.secondaryBackgroundColor"])
@@ -113,7 +113,7 @@ def viz_double_strand(seq1, seq2):
         view.setStyle({'model': 1, 'serial': i+1}, {"sphere": {'color': color_dict.get(seq2[i], "black"), 'scale':2.5}})
         i += 1
     view.zoomTo()
-    stmol.showmol(view, height=200, width=700)
+    stmol.showmol(view, height=height, width=width)
 
 
 def viz_dna():
