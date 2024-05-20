@@ -85,10 +85,10 @@ def viz_double_strand(seq1, seq2):
     color_dict = {"A":"Red", "U":"Blue", "G":'Yellow', "C":"Green", "T":"Purple", "a":"Red", "u":"Blue", "g":'Yellow', "c":"Green", "t":"Purple"}
     generate_pdb(len(seq1))
 
-    with open("pdb\\strand1.pdb") as ifile:
+    with open("pdb\strand1.pdb") as ifile:
         system1 = "".join([x for x in ifile])
 
-    with open("pdb\\strand2.pdb") as ifile2:
+    with open("pdb\strand2.pdb") as ifile2:
         system2 = "".join([x for x in ifile2])
 
     view = py3Dmol.view(height=200, width=700)
