@@ -3,5 +3,5 @@ path = "Home.py"
 name = "Home"
 
 [[pages]]
-path = "other_pages//PythonVersion.py"
+path = "other_pages/PythonVersion.py"
 name = "Transcription Task"

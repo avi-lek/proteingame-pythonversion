@@ -38,7 +38,7 @@ def generate_pdb(sequence_length):
         pdb_file.write("END\n")
     atom_counter = 1  # Counter for atom serial numbers
     residue_counter = 1  # Counter for residue numbers
-    with open("pdb/strand2.pdb", 'w') as pdb_file:
+    with open("pdb\strand2.pdb", 'w') as pdb_file:
         # Header information
         pdb_file.write("HEADER    Double Helix DNA\n")
         
@@ -85,10 +85,10 @@ def viz_double_strand(seq1, seq2, height=200, width=700):
     color_dict = {"A":"Red", "U":"Blue", "G":'Yellow', "C":"Green", "T":"Purple", "a":"Red", "u":"Blue", "g":'Yellow', "c":"Green", "t":"Purple"}
     generate_pdb(len(seq1))
 
-    with open("pdb\strand1.pdb") as ifile:
+    with open("pdb/strand1.pdb") as ifile:
         system1 = "".join([x for x in ifile])
 
-    with open("pdb\strand2.pdb") as ifile2:
+    with open("pdb/strand2.pdb") as ifile2:
         system2 = "".join([x for x in ifile2])
 
     view = py3Dmol.view(height=height, width=width)
@@ -117,10 +117,10 @@ def viz_double_strand(seq1, seq2, height=200, width=700):
 
 
 def viz_dna():
-    with open("pdb\\strand1.pdb") as ifile:
+    with open("pdb/strand1.pdb") as ifile:
         system1 = "".join([x for x in ifile])
 
-    with open("pdb\\strand2.pdb") as ifile2:
+    with open("pdb/strand2.pdb") as ifile2:
         system2 = "".join([x for x in ifile2])
     view = py3Dmol.view(height=800, width=800)
     view.addModelsAsFrames(system1)

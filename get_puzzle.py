@@ -2,7 +2,7 @@ import pandas
 import streamlit as st
 def get_puzzle():
     #imports csv into a Pandas DataFrame
-    reader = pandas.read_csv('puzzles//puzzle_table.csv')
+    reader = pandas.read_csv('puzzles/puzzle_table.csv')
     #get random row
     random_row = reader.sample()
     st.session_state['puzzle_info'] = {
