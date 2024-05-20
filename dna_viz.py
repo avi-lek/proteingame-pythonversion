@@ -12,7 +12,7 @@ def generate_pdb(sequence_length):
     atom_counter = 1  # Counter for atom serial numbers
     residue_counter = 1  # Counter for residue numbers
     res_per_swirl = 10
-    with open("pdb//strand1.pdb", 'w') as pdb_file:
+    with open("pdb/strand1.pdb", 'w') as pdb_file:
         # Header information
         pdb_file.write("HEADER    Double Helix DNA\n")
         
@@ -38,7 +38,7 @@ def generate_pdb(sequence_length):
         pdb_file.write("END\n")
     atom_counter = 1  # Counter for atom serial numbers
     residue_counter = 1  # Counter for residue numbers
-    with open("pdb//strand2.pdb", 'w') as pdb_file:
+    with open("pdb/strand2.pdb", 'w') as pdb_file:
         # Header information
         pdb_file.write("HEADER    Double Helix DNA\n")
         
@@ -64,7 +64,7 @@ def viz_single_strand(seq):
     color_dict = {"A":"Red", "U":"Blue", "G":'Yellow', "C":"Green", "T":"Purple", "a":"Red", "u":"Blue", "g":'Yellow', "c":"Green", "t":"Purple"}
     generate_pdb(len(seq))
 
-    with open("pdb\\strand1.pdb") as ifile:
+    with open("pdb/strand1.pdb") as ifile:
         system1 = "".join([x for x in ifile])
     view = py3Dmol.view(height=200, width=700)
     theme_dict = {"light":"dark", "dark":"light"}
