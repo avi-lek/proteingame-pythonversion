@@ -59,7 +59,7 @@ if ms.themes["refreshed"] == False:
   st.rerun()
 
 # Write Instructions
-url_feedback = "https://forms.gle/33tUxLnaLnmneQHA8"
+url_feedback = "https://forms.gle/q9mjvDEk1PeHW5aTA"
 st.markdown('''After using this website, please let us know how you liked it [here](%s)!''' % url_feedback)
 st.write("\n")
 st.write("Fun DNA Model:")

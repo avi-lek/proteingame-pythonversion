@@ -38,7 +38,7 @@ def generate_pdb(sequence_length):
         pdb_file.write("END\n")
     atom_counter = 1  # Counter for atom serial numbers
     residue_counter = 1  # Counter for residue numbers
-    with open("pdb\strand2.pdb", 'w') as pdb_file:
+    with open("pdb/strand2.pdb", 'w') as pdb_file:
         # Header information
         pdb_file.write("HEADER    Double Helix DNA\n")
         

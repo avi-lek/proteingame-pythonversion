@@ -117,7 +117,13 @@ print(rna_sequence)
     Once you're confident in your code, hover over the bottom right corner of the text editor window and click Run.  
     '''
     st.write(transcribe_instructs)
-
+    steps = """
+        1. Create a for loop to iterate through every nucleotide in dna_sequence.
+        2. Inside the for loop, create an if statement that adds a Uracil to the RNA sequence if nucleotide is Adenine.
+        3. Then create an if statement that adds an Adenine if nucleotide is Thymine.
+        4. Add another if statement that adds a Cytosine if nucleotide is Guanine.
+        5. Otherwise, the base must be Guanine, so add an “else” statement that adds a Cytosine."""
+    st.write(steps)
     # code editor config variables
     height = [19, 22]
     language="python"
