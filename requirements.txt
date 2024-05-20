@@ -3,4 +3,3 @@ biopython
 st_pages
 streamlit_code_editor
 pandas
-contextlib
