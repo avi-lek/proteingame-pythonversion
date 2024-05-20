@@ -154,7 +154,7 @@ print(rna_sequence)
             viz_double_strand(st.session_state.dna, output)
 
         if matches:
-            st.success("Congratulations, your code works! You've now finished the exercise!")
+            st.success("Congratulations, your code works! You've now finished the exercise! If you have time, please take just 5 min to fill out our feedback form in the Home page!")
             st.balloons()
             #st.write("Below is a model of the folded protein after translation of the RNA:")
             #aa_seq = rna_to_amino_acids(output)
