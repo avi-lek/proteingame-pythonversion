@@ -1,12 +1,10 @@
 import streamlit as st
 from pyversion_funcs import *
-from st_pages import hide_pages
 from py_version_sidebar_utils import *
 from py_version_utils import *
 from execute import *
 
 #Formatting
-hide_pages(["Python Transcription", "Python Translation"])
 st.markdown("""
         <style>
                .block-container {
@@ -20,7 +18,7 @@ st.markdown("""
 
 if "py_step" not in st.session_state:
     st.session_state.py_step = 0
-st.header("Python Version")
+st.header("Transcription Task")
 init_sidebar()
 
 
@@ -44,7 +42,44 @@ if st.session_state.py_step < 4:
         st.rerun()
 
 
+ms = st.session_state
+if "themes" not in ms: 
+  ms.themes = {"current_theme": "light",
+                    "refreshed": True,
+                    
+                    "light": {"theme.base": "dark",
+                              "theme.backgroundColor": "#0E1117",
+                              "theme.primaryColor": "#FF4B4B",
+                              "theme.secondaryBackgroundColor": "#262730",
+                              "theme.textColor": "#FAFAFA",
+                              "button_face": "🌜"},
 
+                    "dark":  {"theme.base": "light",
+                              "theme.backgroundColor": "#FFFFFF",
+                              "theme.primaryColor": "#FF4B4B",
+                              "theme.secondaryBackgroundColor": "#F0F2F6",
+                              "theme.textColor": "#31333F",
+                              "button_face": "🌞"},
+                    }
+  
+
+def ChangeTheme():
+    previous_theme = ms.themes["current_theme"]
+    tdict = ms.themes["light"] if ms.themes["current_theme"] == "light" else ms.themes["dark"]
+    for vkey, vval in tdict.items(): 
+        if vkey.startswith("theme"): st._config.set_option(vkey, vval)
+
+    ms.themes["refreshed"] = False
+    if previous_theme == "dark": ms.themes["current_theme"] = "light"
+    elif previous_theme == "light": ms.themes["current_theme"] = "dark"
+
+btn_face = ms.themes["light"]["button_face"] if ms.themes["current_theme"] == "light" else ms.themes["dark"]["button_face"]
+
+st.sidebar.toggle("Light/Dark Mode", on_change=ChangeTheme)
+
+if ms.themes["refreshed"] == False:
+  ms.themes["refreshed"] = True
+  st.rerun()
 
 
 

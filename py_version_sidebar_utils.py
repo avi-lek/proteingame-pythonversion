@@ -7,8 +7,10 @@ def init_sidebar():
             #st.session_state.percent_complete = 0
             #st.session_state.checkpoints = ["item1", "item2", "item3", "item4", "Complete"]
             #st.session_state.progress_bar = st.progress(0, text="Introduction")
-    py_ref, codon_chart = st.sidebar.tabs(["Python Reference", "Codon Wheel"])
-    with py_ref:
+    #py_ref, codon_chart = st.sidebar.tabs(["Python Reference", "Codon Wheel"])
+    #with py_ref:
+    with st.sidebar:
+        st.info("Python Reference")
         with st.expander("Strings"):
             st.write('''
                 In Python, a string is a datatype that represents a sequence of characters. For example, you might use strings to store names, messages, and other text. You can *initialize*, or create, a new string by assigning the name of the string to some text in quotations, with the equals sign. 
@@ -91,8 +93,8 @@ def init_sidebar():
             '''
             st.code(string_code_example, language='python')
             st.write('''Here, we're running multiple if statements. First, we check if the school is Bellarmine. If so, we print Go Bells! If not, we run the second if statement using "elif" (short for "else if") and check if the school is Mitty. If so, we print Go Monarchs! If both those conditions are false and the school is neither Bell or Mitty, then we'll simply ask what the school mascot is using "else."''')
-    with codon_chart:
-        st.image('screenshots//codon_wheel.png')
+    #with codon_chart:
+        #st.image('screenshots//codon_wheel.png')
 
 
 
