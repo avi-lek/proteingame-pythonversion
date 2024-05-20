@@ -1,10 +1,6 @@
-requests
-numpy
-biopython
-pandas
 streamlit
+biopython
 st_pages
-py3Dmol
-ipython_genutils
-text-highlighter
-streamlit_extras
+streamlit_code_editor
+pandas
+contextlib

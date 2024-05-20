@@ -1,8 +1,5 @@
 import random
 from Bio.Seq import Seq
-import streamlit as st
-import pandas as pd
-from streamlit_ace import st_ace
 
 
 # gets random DNA sequence

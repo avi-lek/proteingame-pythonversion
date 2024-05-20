@@ -1,9 +1,6 @@
-import streamlit as st
-from streamlit_ace import st_ace
 import contextlib
 import io
 import sys
-from Bio.Seq import Seq
 from pyversion_funcs import rna_to_aa_super_secret
 from pyversion_funcs import dna_to_rna
 

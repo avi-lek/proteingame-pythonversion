@@ -1,7 +1,6 @@
 import streamlit as st
 from st_pages import show_pages_from_config, hide_pages
 from streamlit_extras.let_it_rain import rain 
-import toml
 
 #Configure Page
 st.set_page_config(page_title="My Protein Is Broken!", page_icon=":dna:", layout="wide")
