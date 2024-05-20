@@ -155,19 +155,19 @@ print(rna_sequence)
 
         if matches:
             st.success("Congratulations, your code works! You've now finished the exercise!")
-
-            st.write("Below is a model of the folded protein after translation of the RNA:")
-            aa_seq = rna_to_amino_acids(output)
-            get_esm_pdb(aa_seq)
-            view = py3Dmol.view(height=700, width=700)
-            theme_dict = {"light":"dark", "dark":"light"}
-            theme = theme_dict[st.session_state.themes["current_theme"]]
-            view.setBackgroundColor(st.session_state.themes[theme]["theme.secondaryBackgroundColor"])
-            view.addModel(open('pdb\\protein.pdb', 'r').read(),'pdb')
-            view.setStyle({'model': -1}, {"cartoon": {'color': 'spectrum'}})
-            add_hover(view)
-            view.zoomTo()
-            stmol.showmol(view, height=700, width=700)
+            st.balloons()
+            #st.write("Below is a model of the folded protein after translation of the RNA:")
+            #aa_seq = rna_to_amino_acids(output)
+            #get_esm_pdb(aa_seq)
+            #view = py3Dmol.view(height=700, width=700)
+            #theme_dict = {"light":"dark", "dark":"light"}
+            #theme = theme_dict[st.session_state.themes["current_theme"]]
+            #view.setBackgroundColor(st.session_state.themes[theme]["theme.secondaryBackgroundColor"])
+            #view.addModel(open('pdb\\protein.pdb', 'r').read(),'pdb')
+            #view.setStyle({'model': -1}, {"cartoon": {'color': 'spectrum'}})
+            #add_hover(view)
+            #view.zoomTo()
+            #stmol.showmol(view, height=700, width=700)
             
         else:
             st.warning("Not quite. Try again.")
